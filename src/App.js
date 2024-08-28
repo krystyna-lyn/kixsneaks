@@ -5,6 +5,26 @@ import 'macro-css';
 function App() {
   return (
     <div className="wrapper clear">
+      <div className="overlay">
+        <div className='drawer'>
+          <h2>Cart</h2>
+
+          <div className='cartItem d-flex align-center mb-20'>
+            <div
+              style={{ backgroundImage: 'url(./img/sneakers/1.jpg' }}
+              className='cartItemImg'
+            ></div>
+
+            <div className='mr-20 flex'>
+              <p className='mb-5'>Man sneakers Nike Blazer Mid Suede</p>
+              <b>170€</b>
+            </div>
+            <img className='removeBtn' src="./img/btn-remove.svg" alt="remove" />
+          </div>
+
+
+        </div>
+      </div>
       <header className="d-flex justify-between align-center p-40">
         <div className='d-flex align-center'>
           <img width={40} height={40} src="./img/logo.png" alt="logo" />
@@ -34,6 +54,9 @@ function App() {
 
         <div className="sneakers d-flex justify-between flex-wrap">
           <div className="card">
+            <div className='favorite'>
+              <img src="./img/unliked.svg" alt="heart" />
+            </div>
             <img width={133} height={112} src="./img/sneakers/1.jpg" alt="item" />
             <h5>Man sneakers Nike Blazer Mid Suede</h5>
             <div className='d-flex justify-between align-center'>
@@ -47,6 +70,9 @@ function App() {
             </div>
           </div>
           <div className="card">
+            <div className='favorite'>
+              <img src="./img/unliked.svg" alt="heart" />
+            </div>
             <img width={133} height={112} src="./img/sneakers/2.jpg" alt="item" />
             <h5>Man sneakers Nike Blazer Mid Suede</h5>
             <div className='d-flex justify-between align-center'>
@@ -60,6 +86,9 @@ function App() {
             </div>
           </div>
           <div className="card">
+            <div className='favorite'>
+              <img src="./img/unliked.svg" alt="heart" />
+            </div>
             <img width={133} height={112} src="./img/sneakers/3.jpg" alt="item" />
             <h5>Man sneakers Nike Blazer Mid Suede</h5>
             <div className='d-flex justify-between align-center'>
@@ -73,6 +102,9 @@ function App() {
             </div>
           </div>
           <div className="card">
+            <div className='favorite'>
+              <img src="./img/unliked.svg" alt="heart" />
+            </div>
             <img width={133} height={112} src="./img/sneakers/4.jpg" alt="item" />
             <h5>Man sneakers Nike Blazer Mid Suede</h5>
             <div className='d-flex justify-between align-center'>
