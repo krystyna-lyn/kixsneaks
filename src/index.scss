@@ -105,6 +105,8 @@ input {
 }
 
 .drawer {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 0;
   right: 0;
@@ -118,6 +120,12 @@ input {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
+  }
+
+  .items {
+    flex: 1;
+    overflow: auto;
+    margin-bottom: 40px;
   }
 
   .cartItem {
@@ -152,6 +160,22 @@ input {
         opacity: 1;
       }
     }
+  }
+
+  .cartTotalBlock {
+    li {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    div {
+      flex: 1;
+      border-bottom: 1px dashed #dfdfdf;
+      height: 1;
+    }
+
+
   }
 
 
