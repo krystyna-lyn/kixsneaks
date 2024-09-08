@@ -4,6 +4,10 @@
     border-radius: 20px;
     padding: 30px;
 
+    .plus {
+        cursor: pointer;
+    }
+
 
     .favorite {
         position: absolute;
@@ -31,14 +35,5 @@
         font-size: 14px;
     }
 
-    .button {
-        background-color: #ffffff;
-        border: 1px solid #f2f2f2;
-        box-sizing: border-box;
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        cursor: pointer;
-    }
 
 }

@@ -3,14 +3,17 @@ import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Card from './components/Card';
 import { data } from '../src/constants'
+import { useState } from 'react';
 
 
 function App() {
 
+  const [cartOpened, setCartOpened] = useState(false)
+
   return (
     <div className="wrapper clear">
-      <Drawer />
-      <Header />
+      {cartOpened && <Drawer onClose={() => setCartOpened(false)} />}
+      <Header openCart={() => setCartOpened(true)} />
       <div className="content p-40">
         <div className='d-flex align-center mb-40 justify-between'>
           <h1 className=''>All sneakers</h1>
@@ -31,6 +34,7 @@ function App() {
                   title={obj.title}
                   imgUrl={obj.imgUrl}
                   price={obj.price}
+                  addToCart={() => console.log('added')}
                 />
               )
             })
