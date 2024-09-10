@@ -2,13 +2,20 @@ import 'macro-css';
 import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Card from './components/Card';
-import { data } from '../src/constants'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 function App() {
+  const [items, setitems] = useState([])
+  const [cartOpened, setCartOpened] = useState(false);
 
-  const [cartOpened, setCartOpened] = useState(false)
+  useEffect(() => {
+    fetch('https://66df7092de4426916ee49649.mockapi.io/items').then((res) => {
+      return res.json()
+    }).then((json) => {
+      setitems(json)
+    })
+  }, [])
 
   return (
     <div className="wrapper clear">
@@ -26,7 +33,7 @@ function App() {
         <div className="sneakers d-flex justify-between flex-wrap">
 
           {
-            data.map(obj => {
+            items.map(obj => {
               return (
                 <Card
                   key={obj.id}
