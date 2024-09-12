@@ -1,37 +1,28 @@
 
-function Drawer(props) {
+function Drawer({ items, onClose }) {
+
     return (
         <div className="overlay">
             <div className='drawer'>
                 <h2 className='d-flex justify-between mb-30'>Cart
-                    <img onClick={props.onClose} className='removeBtn cu-p' src="./img/btn-remove.svg" alt="remove" />
+                    <img onClick={onClose} className='removeBtn cu-p' src="./img/btn-remove.svg" alt="remove" />
                 </h2>
                 <div className='items'>
-                    <div className='cartItem d-flex align-center mb-20'>
-                        <div
-                            style={{ backgroundImage: 'url(./img/sneakers/1.jpg' }}
-                            className='cartItemImg'
-                        ></div>
+                    {items.map((obj) => (
+                        <div className='cartItem d-flex align-center mb-20' >
+                            <div
+                                style={{ backgroundImage: `url(${obj.imgUrl})` }}
+                                className='cartItemImg'
+                            ></div>
 
-                        <div className='mr-20 flex'>
-                            <p className='mb-5'>Man sneakers Nike Blazer Mid Suede</p>
-                            <b>170€</b>
+                            <div className='mr-20 flex'>
+                                <p className='mb-5'>{obj.title}</p>
+                                <b>{obj.price}€</b>
+                            </div>
+                            <img className='removeBtn' src="./img/btn-remove.svg" alt="remove" />
                         </div>
-                        <img className='removeBtn' src="./img/btn-remove.svg" alt="remove" />
-                    </div>
-                    <div className='cartItem d-flex align-center mb-20'>
-                        <div
-                            style={{ backgroundImage: 'url(./img/sneakers/1.jpg' }}
-                            className='cartItemImg'
-                        ></div>
-
-                        <div className='mr-20 flex'>
-                            <p className='mb-5'>Man sneakers Nike Blazer Mid Suede</p>
-                            <b>170€</b>
-                        </div>
-                        <img className='removeBtn' src="./img/btn-remove.svg" alt="remove" />
-                    </div>
-
+                    )
+                    )}
 
                 </div>
 
@@ -53,7 +44,7 @@ function Drawer(props) {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     )
 
 }
