@@ -20,15 +20,18 @@ function App() {
   }, [])
 
   const addToCart = (obj) => {
-    console.log(obj)
     setcartItems(prev => [...prev, obj])
   }
+
+  const deleteItem = (id) => {
+    setcartItems(cartItems => cartItems.filter((item) => item.id !== id));
+  };
 
   console.log(cartItems)
 
   return (
     <div className="wrapper clear">
-      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} />}
+      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={(id) => deleteItem(id)} />}
       <Header openCart={() => setCartOpened(true)} />
       <div className="content p-40">
         <div className='d-flex align-center mb-40 justify-between'>
