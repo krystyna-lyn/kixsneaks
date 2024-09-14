@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 function App() {
   const [items, setitems] = useState([])
   const [cartItems, setcartItems] = useState([])
-
+  const [searchValue, setSearchValue] = useState('');
   const [cartOpened, setCartOpened] = useState(false);
 
   useEffect(() => {
@@ -27,7 +27,10 @@ function App() {
     setcartItems(cartItems => cartItems.filter((item) => item.id !== id));
   };
 
-  console.log(cartItems)
+  const searchItem = (event) => {
+    //console.log(event.target.value)
+    setSearchValue(event.target.value);
+  }
 
   return (
     <div className="wrapper clear">
@@ -35,30 +38,39 @@ function App() {
       <Header openCart={() => setCartOpened(true)} />
       <div className="content p-40">
         <div className='d-flex align-center mb-40 justify-between'>
-          <h1 className=''>All sneakers</h1>
+          <h1>{searchValue ? `search for '${searchValue}'` : 'All sneakers'}</h1>
           <div className="search-block d-flex">
             <img src="./img/search.svg" alt="search" />
-            <input type="text" placeholder="Search..." />
+            {searchValue && (
+              <img className='clear cu-p'
+                onClick={() => setSearchValue('')}
+                src="./img/btn-remove.svg"
+                alt="remove" />
+            )}
+
+            <input onChange={searchItem} value={searchValue} type="text" placeholder="Search..." />
           </div>
         </div>
 
         <div className="sneakers d-flex justify-between flex-wrap">
 
           {
-            items.map(item => {
-              return (
-                <Card
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  imgUrl={item.imgUrl}
-                  price={item.price}
-                  addToCart={() => console.log('added')}
-                  onFavorite={() => console.log('your fav item')}
-                  onPlus={(obj) => addToCart(obj)}
-                />
-              )
-            })
+            items
+              .filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()))
+              .map(item => {
+                return (
+                  <Card
+                    key={item.id}
+                    id={item.id}
+                    title={item.title}
+                    imgUrl={item.imgUrl}
+                    price={item.price}
+                    addToCart={() => console.log('added')}
+                    onFavorite={() => console.log('your fav item')}
+                    onPlus={(obj) => addToCart(obj)}
+                  />
+                )
+              })
           }
         </div>
 
