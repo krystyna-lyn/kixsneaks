@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Card from './components/Card';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 
 function App() {
@@ -20,10 +21,12 @@ function App() {
   }, [])
 
   const addToCart = (obj) => {
+    axios.post('https://66df7092de4426916ee49649.mockapi.io/cart-items', obj);
     setcartItems(prev => [...prev, obj])
   }
 
   const deleteItem = (id) => {
+    axios.delete(`https://66df7092de4426916ee49649.mockapi.io/cart-items/${id}`);
     setcartItems(cartItems => cartItems.filter((item) => item.id !== id));
   };
 
