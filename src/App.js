@@ -13,27 +13,33 @@ function App() {
   const [cartOpened, setCartOpened] = useState(false);
 
   useEffect(() => {
-    fetch('https://66df7092de4426916ee49649.mockapi.io/items').then((res) => {
-      return res.json()
-    }).then((json) => {
-      setitems(json)
+
+    axios.get('https://66df7092de4426916ee49649.mockapi.io/items').then((res) => {
+      setitems(res.data)
+    })
+
+    axios.get('https://66df7092de4426916ee49649.mockapi.io/cart').then((res) => {
+      setcartItems(res.data)
     })
   }, [])
 
   const addToCart = (obj) => {
-    axios.post('https://66df7092de4426916ee49649.mockapi.io/cart-items', obj);
+    axios.post('https://66df7092de4426916ee49649.mockapi.io/cart', obj);
     setcartItems(prev => [...prev, obj])
   }
 
   const deleteItem = (id) => {
-    axios.delete(`https://66df7092de4426916ee49649.mockapi.io/cart-items/${id}`);
-    setcartItems(cartItems => cartItems.filter((item) => item.id !== id));
+    axios.delete(`https://66df7092de4426916ee49649.mockapi.io/cart/${id}`);
+    setcartItems(prev => prev.filter((item) => item.id !== id));
+
   };
 
   const searchItem = (event) => {
     //console.log(event.target.value)
     setSearchValue(event.target.value);
   }
+
+
 
   return (
     <div className="wrapper clear">
