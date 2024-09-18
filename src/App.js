@@ -21,11 +21,16 @@ function App() {
     axios.get('https://66df7092de4426916ee49649.mockapi.io/cart').then((res) => {
       setcartItems(res.data)
     })
+
   }, [])
 
   const addToCart = (obj) => {
     axios.post('https://66df7092de4426916ee49649.mockapi.io/cart', obj);
     setcartItems(prev => [...prev, obj])
+  }
+
+  const addFavorite = (id) => {
+    axios.post(`http://localhost:8000/favorite/${id}`);
   }
 
   const deleteItem = (id) => {
@@ -75,7 +80,7 @@ function App() {
                     imgUrl={item.imgUrl}
                     price={item.price}
                     addToCart={() => console.log('added')}
-                    onFavorite={() => console.log('your fav item')}
+                    onFav={(obj) => addFavorite(obj)}
                     onPlus={(obj) => addToCart(obj)}
                   />
                 )
