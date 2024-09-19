@@ -11,15 +11,18 @@ function App() {
   const [cartItems, setcartItems] = useState([])
   const [searchValue, setSearchValue] = useState('');
   const [cartOpened, setCartOpened] = useState(false);
+  const [Favorite, setFavorite] = useState(false);
 
   useEffect(() => {
 
     axios.get('https://66df7092de4426916ee49649.mockapi.io/items').then((res) => {
       setitems(res.data)
     })
-
     axios.get('https://66df7092de4426916ee49649.mockapi.io/cart').then((res) => {
       setcartItems(res.data)
+    })
+    axios.get('https://66ec78282b6cf2b89c5e89a8.mockapi.io/favorites').then((res) => {
+      setFavorite(res.data)
     })
 
   }, [])
@@ -29,8 +32,11 @@ function App() {
     setcartItems(prev => [...prev, obj])
   }
 
-  const addFavorite = (id) => {
-    axios.post(`http://localhost:8000/favorite/${id}`);
+  const onAddToFavorite = (obj) => {
+    axios.post(
+      'https://66ec78282b6cf2b89c5e89a8.mockapi.io/favorites', obj,);
+    setFavorite((prev) => [...prev, obj]);
+
   }
 
   const deleteItem = (id) => {
@@ -80,7 +86,7 @@ function App() {
                     imgUrl={item.imgUrl}
                     price={item.price}
                     addToCart={() => console.log('added')}
-                    onFav={(obj) => addFavorite(obj)}
+                    addFavorite={(obj) => onAddToFavorite(obj)}
                     onPlus={(obj) => addToCart(obj)}
                   />
                 )

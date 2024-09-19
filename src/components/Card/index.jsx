@@ -1,19 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from '../Card/Card.module.scss';
-import axios from 'axios';
 
-function Card({ id, onPlus, title, price, imgUrl, onFav }) {
+
+function Card({ id, onPlus, title, price, imgUrl, addFavorite }) {
 
     const [isAdded, setIsAdded] = useState(false);
-    const [onFavorite, setOnFavorite] = useState(false);
-
-    useEffect(() => {
-
-        axios.get('http://localhost:8000/favorite').then((res) => {
-            setOnFavorite(res.data)
-        })
-    }, [])
-    console.log(onFavorite)
+    const [isFavorite, setIsFavorite] = useState(false);
 
 
     const onClickPlus = () => {
@@ -21,17 +13,17 @@ function Card({ id, onPlus, title, price, imgUrl, onFav }) {
         onPlus({ id, title, price, imgUrl });
     }
 
-    const onClickFav = () => {
-        setOnFavorite(!onFavorite);
-        onFav({ id, title, price, imgUrl });
+    const onClickFavorite = () => {
 
+        addFavorite({ id, title, price, imgUrl });
+        setIsFavorite(!isFavorite);
     }
 
     return (
         <div className={styles.card}>
-            <div className={styles.favorite} onClick={onClickFav}>
+            <div className={styles.favorite} onClick={onClickFavorite} >
                 <img
-                    src={onFavorite ? "./img/liked.svg" : "./img/unliked.svg"}
+                    src={isFavorite ? "./img/liked.svg" : "./img/unliked.svg"}
                     alt="heart"
                 />
             </div>
