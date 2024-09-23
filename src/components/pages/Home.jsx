@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from "../Card";
 
 
 function Home({ items, searchItem, addToCart, setSearchValue, searchValue, onAddToFavorite }) {

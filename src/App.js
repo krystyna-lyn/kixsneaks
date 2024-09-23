@@ -2,10 +2,10 @@ import 'macro-css';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Drawer from './components/Drawer';
-import Favorites from './components/Favorites';
+import Favorites from './components/pages/Favorites';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Home from './components/Home';
+import Home from './components/pages/Home';
 
 
 function App() {
