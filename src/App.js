@@ -1,17 +1,40 @@
 import 'macro-css';
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Drawer from './components/Drawer';
-import Card from './components/Card';
+import Favorites from './components/Favorites';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Home from './components/Home';
 
 
 function App() {
-  const [items, setitems] = useState([])
+
+  const [items, setitems] = useState([]);
+  const [cartOpened, setCartOpened] = useState(false);
+  const [favorite, setFavorite] = useState(false);
   const [cartItems, setcartItems] = useState([])
   const [searchValue, setSearchValue] = useState('');
-  const [cartOpened, setCartOpened] = useState(false);
-  const [Favorite, setFavorite] = useState(false);
+
+
+
+  const addToCart = (obj) => {
+    axios.post('http://localhost:8000/cart', obj);
+    setcartItems(prev => [...prev, obj])
+  }
+
+  const onAddToFavorite = (obj) => {
+    axios.post(
+      'http://localhost:8000/favorite', obj,);
+    setFavorite((prev) => [...prev, obj]);
+
+  }
+
+  const searchItem = (event) => {
+    //console.log(event.target.value)
+    setSearchValue(event.target.value);
+  }
+
 
   useEffect(() => {
 
@@ -27,17 +50,7 @@ function App() {
 
   }, [])
 
-  const addToCart = (obj) => {
-    axios.post('http://localhost:8000/cart', obj);
-    setcartItems(prev => [...prev, obj])
-  }
 
-  const onAddToFavorite = (obj) => {
-    axios.post(
-      'http://localhost:8000/favorite', obj,);
-    setFavorite((prev) => [...prev, obj]);
-
-  }
 
   const deleteItem = (id) => {
     axios.delete(`http://localhost:8000/cart/${id}`);
@@ -45,56 +58,36 @@ function App() {
 
   };
 
-  const searchItem = (event) => {
-    //console.log(event.target.value)
-    setSearchValue(event.target.value);
-  }
-
-
-
   return (
     <div className="wrapper clear">
-      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={(id) => deleteItem(id)} />}
+      {cartOpened && <Drawer cartItems={cartItems} onClose={() => setCartOpened(false)} onRemove={(id) => deleteItem(id)} />}
+
       <Header openCart={() => setCartOpened(true)} />
-      <div className="content p-40">
-        <div className='d-flex align-center mb-40 justify-between'>
-          <h1>{searchValue ? `search for '${searchValue}'` : 'All sneakers'}</h1>
-          <div className="search-block d-flex">
-            <img src="./img/search.svg" alt="search" />
-            {searchValue && (
-              <img className='clear cu-p'
-                onClick={() => setSearchValue('')}
-                src="./img/btn-remove.svg"
-                alt="remove" />
-            )}
 
-            <input onChange={searchItem} value={searchValue} type="text" placeholder="Search..." />
-          </div>
-        </div>
+      <Routes>
+        <Route path="/" element={
+          <Home
+            items={items}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            searchItem={searchItem}
+            addToCart={addToCart}
+            onAddToFavorite={onAddToFavorite}
+          />
+        }
+          exact
+        />
+        <Route path="/favorites" element={
+          <Favorites
+            favorite={favorite}
+            addToCart={addToCart}
+          />
+        }
+        />
+      </Routes>
 
-        <div className="sneakers d-flex justify-between flex-wrap">
 
-          {
-            items
-              .filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()))
-              .map(item => {
-                return (
-                  <Card
-                    key={item.id}
-                    id={item.id}
-                    title={item.title}
-                    imgUrl={item.imgUrl}
-                    price={item.price}
-                    addToCart={() => console.log('added')}
-                    addFavorite={(obj) => onAddToFavorite(obj)}
-                    onPlus={(obj) => addToCart(obj)}
-                  />
-                )
-              })
-          }
-        </div>
 
-      </div>
     </div>
   );
 }

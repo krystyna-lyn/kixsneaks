@@ -61,13 +61,38 @@
       "price": 100
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "id": "3",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 300,
+      "imgUrl": "./img/sneakers/3.jpg"
+    }
+  ],
   "favorite": [
     {
       "id": 1,
       "title": "Man sneakers Nike Blazer Mid Suede",
       "price": 100,
       "imgUrl": "./img/sneakers/1.jpg"
+    },
+    {
+      "id": "3",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 300,
+      "imgUrl": "./img/sneakers/3.jpg"
+    },
+    {
+      "id": "3",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 300,
+      "imgUrl": "./img/sneakers/3.jpg"
+    },
+    {
+      "id": "10",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 100,
+      "imgUrl": "./img/sneakers/10.jpg"
     }
   ]
 }
