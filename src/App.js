@@ -17,25 +17,6 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
 
 
-
-  const addToCart = (obj) => {
-    axios.post('http://localhost:8000/cart', obj);
-    setcartItems(prev => [...prev, obj])
-  }
-
-  const onAddToFavorite = (obj) => {
-    axios.post(
-      'http://localhost:8000/favorite', obj,);
-    setFavorite((prev) => [...prev, obj]);
-
-  }
-
-  const searchItem = (event) => {
-    //console.log(event.target.value)
-    setSearchValue(event.target.value);
-  }
-
-
   useEffect(() => {
 
     axios.get('http://localhost:8000/items').then((res) => {
@@ -49,6 +30,29 @@ function App() {
     })
 
   }, [])
+  const addToCart = (obj) => {
+    axios.post('http://localhost:8000/cart', obj);
+    setcartItems(prev => [...prev, obj])
+  }
+
+  const onAddToFavorite = async (obj) => {
+    if (favorite.find((favObj) => favObj.id == obj.id)) {
+      axios.delete(`http://localhost:8000/favorite/${obj.id}`);
+      setFavorite(prev => prev.filter((item) => item.id !== obj.id));
+    }
+    else {
+      const { data } = await axios.post('http://localhost:8000/favorite', obj,);
+      setFavorite((prev) => [...prev, data]);
+    }
+  }
+
+  const searchItem = (event) => {
+    //console.log(event.target.value)
+    setSearchValue(event.target.value);
+  }
+
+
+
 
 
 
@@ -81,6 +85,8 @@ function App() {
           <Favorites
             favorite={favorite}
             addToCart={addToCart}
+            onAddToFavorite={onAddToFavorite}
+            favorited={true}
           />
         }
         />
