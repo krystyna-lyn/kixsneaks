@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import styles from '../Card/Card.module.scss';
+import ContentLoader from "react-content-loader"
 
 
-function Card({ id, onPlus, title, price, imgUrl, addFavorite, favorited = false }) {
+function Card({ id, onPlus, title, price, imgUrl, addFavorite, favorited = false, added = false }) {
 
-    const [isAdded, setIsAdded] = useState(false);
+    const [isAdded, setIsAdded] = useState(added);
     const [isFavorite, setIsFavorite] = useState(favorited);
 
 

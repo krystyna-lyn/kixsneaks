@@ -19,41 +19,47 @@ function App() {
 
   useEffect(() => {
 
-    axios.get('http://localhost:8000/items').then((res) => {
-      setitems(res.data)
-    })
-    axios.get('http://localhost:8000/cart').then((res) => {
-      setcartItems(res.data)
-    })
-    axios.get('http://localhost:8000/favorite').then((res) => {
-      setFavorite(res.data)
-    })
+    async function fetchData() {
 
+      //axios.get('http://localhost:8000/items').then((res) => {
+      //setitems(res.data)})
+      const favoriteRes = await axios.get('http://localhost:8000/favorite');
+      const cartRes = await axios.get('http://localhost:8000/cart');
+      const itemsRes = await axios.get('http://localhost:8000/items');
+
+      setFavorite(favoriteRes.data);
+      setcartItems(cartRes.data);
+      setitems(itemsRes.data);
+    }
+    fetchData();
   }, [])
+
   const addToCart = (obj) => {
     axios.post('http://localhost:8000/cart', obj);
     setcartItems(prev => [...prev, obj])
   }
 
   const onAddToFavorite = async (obj) => {
-    if (favorite.find((favObj) => favObj.id == obj.id)) {
-      axios.delete(`http://localhost:8000/favorite/${obj.id}`);
-      setFavorite(prev => prev.filter((item) => item.id !== obj.id));
+    try {
+      if (favorite.find((favObj) => favObj.id == obj.id)) {
+        axios.delete(`http://localhost:8000/favorite/${obj.id}`);
+        setFavorite(prev => prev.filter((item) => item.id !== obj.id));
+      }
+      else {
+        const { data } = await axios.post('http://localhost:8000/favorite', obj,);
+        setFavorite((prev) => [...prev, data]);
+      }
     }
-    else {
-      const { data } = await axios.post('http://localhost:8000/favorite', obj,);
-      setFavorite((prev) => [...prev, data]);
+    catch (error) {
+      console.log('The product can not be added to favorites')
     }
+
   }
 
   const searchItem = (event) => {
     //console.log(event.target.value)
     setSearchValue(event.target.value);
   }
-
-
-
-
 
 
   const deleteItem = (id) => {
@@ -72,11 +78,13 @@ function App() {
         <Route path="/" element={
           <Home
             items={items}
+            cartItems={cartItems}
             searchValue={searchValue}
             setSearchValue={setSearchValue}
             searchItem={searchItem}
             addToCart={addToCart}
             onAddToFavorite={onAddToFavorite}
+            favorited={false}
           />
         }
           exact

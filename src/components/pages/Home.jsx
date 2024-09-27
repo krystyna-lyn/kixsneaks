@@ -1,7 +1,7 @@
 import Card from "../Card";
 
 
-function Home({ items, searchItem, addToCart, setSearchValue, searchValue, onAddToFavorite }) {
+function Home({ items, searchItem, addToCart, setSearchValue, searchValue, onAddToFavorite, cartItems }) {
 
     return (
         <div className="content p-40">
@@ -35,6 +35,7 @@ function Home({ items, searchItem, addToCart, setSearchValue, searchValue, onAdd
                                 addToCart={(obj) => addToCart}
                                 addFavorite={(obj) => onAddToFavorite(obj)}
                                 onPlus={(obj) => addToCart(obj)}
+                                added={cartItems.some(obj => obj.id == item.id)}
                             />
                         )
                     })

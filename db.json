@@ -63,18 +63,18 @@
   ],
   "cart": [
     {
-      "id": "5",
-      "title": "Man sneakers Nike Kurie 7",
-      "price": 500,
-      "imgUrl": "./img/sneakers/5.jpg"
+      "id": "1",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 100,
+      "imgUrl": "./img/sneakers/1.jpg"
     }
   ],
   "favorite": [
     {
-      "id": "6",
-      "title": "Man sneakers Nike LeBron",
-      "price": 600,
-      "imgUrl": "./img/sneakers/6.jpg"
+      "id": "4",
+      "title": "Man sneakers Puma X Aka Boku Future Rider",
+      "price": 500,
+      "imgUrl": "./img/sneakers/4.jpg"
     }
   ]
 }
