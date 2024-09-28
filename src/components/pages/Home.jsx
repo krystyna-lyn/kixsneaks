@@ -1,7 +1,35 @@
 import Card from "../Card";
+import ContentLoader from "react-content-loader";
 
 
-function Home({ items, searchItem, addToCart, setSearchValue, searchValue, onAddToFavorite, cartItems }) {
+function Home({
+    items,
+    searchItem,
+    addToCart,
+    setSearchValue,
+    searchValue,
+    onAddToFavorite,
+    cartItems,
+    isLoading
+}) {
+
+    const renderItems = () => {
+
+        const filtredItems = items.filter((item) =>
+            item.title.toLowerCase().includes(searchValue.toLowerCase()),
+        );
+        return (isLoading ? [...Array(10)] : filtredItems).map((item, index) => (
+            <Card
+                key={index}
+                {...item}
+                addToCart={(obj) => addToCart}
+                addFavorite={(obj) => onAddToFavorite(obj)}
+                onPlus={(obj) => addToCart(obj)}
+                added={cartItems.some(obj => obj.id == item.id)}
+                loading={isLoading}
+            />
+        ))
+    }
 
     return (
         <div className="content p-40">
@@ -21,26 +49,7 @@ function Home({ items, searchItem, addToCart, setSearchValue, searchValue, onAdd
             </div>
 
             <div className="sneakers d-flex justify-between flex-wrap">
-
-                {items
-                    .filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()))
-                    .map(item => {
-                        return (
-                            <Card
-                                key={item.id}
-                                id={item.id}
-                                title={item.title}
-                                imgUrl={item.imgUrl}
-                                price={item.price}
-                                addToCart={(obj) => addToCart}
-                                addFavorite={(obj) => onAddToFavorite(obj)}
-                                onPlus={(obj) => addToCart(obj)}
-                                added={cartItems.some(obj => obj.id == item.id)}
-                                loading={false}
-                            />
-                        )
-                    })
-                }
+                {renderItems()}
             </div>
 
         </div>

@@ -15,10 +15,9 @@ function App() {
   const [favorite, setFavorite] = useState(false);
   const [cartItems, setcartItems] = useState([])
   const [searchValue, setSearchValue] = useState('');
-
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-
     async function fetchData() {
 
       //axios.get('http://localhost:8000/items').then((res) => {
@@ -27,10 +26,13 @@ function App() {
       const cartRes = await axios.get('http://localhost:8000/cart');
       const itemsRes = await axios.get('http://localhost:8000/items');
 
+      setIsLoading(false)
+
       setFavorite(favoriteRes.data);
       setcartItems(cartRes.data);
       setitems(itemsRes.data);
     }
+
     fetchData();
   }, [])
 
@@ -85,6 +87,7 @@ function App() {
             addToCart={addToCart}
             onAddToFavorite={onAddToFavorite}
             favorited={false}
+            isLoading={isLoading}
           />
         }
           exact
