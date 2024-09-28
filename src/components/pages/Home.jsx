@@ -36,6 +36,7 @@ function Home({ items, searchItem, addToCart, setSearchValue, searchValue, onAdd
                                 addFavorite={(obj) => onAddToFavorite(obj)}
                                 onPlus={(obj) => addToCart(obj)}
                                 added={cartItems.some(obj => obj.id == item.id)}
+                                loading={false}
                             />
                         )
                     })
