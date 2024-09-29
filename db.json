@@ -63,24 +63,11 @@
   ],
   "cart": [
     {
-      "id": "1",
-      "title": "Man sneakers Nike Blazer Mid Suede",
-      "price": 100,
-      "imgUrl": "./img/sneakers/1.jpg"
-    },
-    {
-      "id": "2",
-      "title": "Man sneakers Nike Air Max 270",
-      "price": 200,
-      "imgUrl": "./img/sneakers/2.jpg"
-    }
-  ],
-  "favorite": [
-    {
       "id": "4",
       "title": "Man sneakers Puma X Aka Boku Future Rider",
       "price": 500,
       "imgUrl": "./img/sneakers/4.jpg"
     }
-  ]
+  ],
+  "favorite": []
 }

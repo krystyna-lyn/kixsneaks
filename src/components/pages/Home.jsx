@@ -1,5 +1,4 @@
 import Card from "../Card";
-import ContentLoader from "react-content-loader";
 
 
 function Home({
@@ -14,18 +13,17 @@ function Home({
 }) {
 
     const renderItems = () => {
-
         const filtredItems = items.filter((item) =>
-            item.title.toLowerCase().includes(searchValue.toLowerCase()),
-        );
-        return (isLoading ? [...Array(10)] : filtredItems).map((item, index) => (
+            item.title.toLowerCase().includes(searchValue.toLowerCase()));
+
+        return isLoading ? [...Array(10)] : filtredItems.map((item, index) => (
             <Card
-                key={index}
+                key={index || items?.id}
                 {...item}
                 addToCart={(obj) => addToCart}
                 addFavorite={(obj) => onAddToFavorite(obj)}
                 onPlus={(obj) => addToCart(obj)}
-                added={cartItems.some(obj => obj.id == item.id)}
+                added={cartItems.some(obj => Number(obj.id) == Number(item.id))}
                 loading={isLoading}
             />
         ))
