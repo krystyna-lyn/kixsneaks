@@ -63,11 +63,30 @@
   ],
   "cart": [
     {
-      "id": "4",
-      "title": "Man sneakers Puma X Aka Boku Future Rider",
-      "price": 500,
-      "imgUrl": "./img/sneakers/4.jpg"
+      "id": "3",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 300,
+      "imgUrl": "./img/sneakers/3.jpg"
     }
   ],
-  "favorite": []
+  "favorite": [
+    {
+      "id": "1",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 100,
+      "imgUrl": "./img/sneakers/1.jpg"
+    },
+    {
+      "id": "8",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 800,
+      "imgUrl": "./img/sneakers/8.jpg"
+    },
+    {
+      "id": "3",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 300,
+      "imgUrl": "./img/sneakers/3.jpg"
+    }
+  ]
 }

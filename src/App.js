@@ -43,7 +43,7 @@ function App() {
 
   const onAddToFavorite = async (obj) => {
     try {
-      if (favorite.find((favObj) => favObj.id == obj.id)) {
+      if (Array.isArray(favorite) && favorite.find((favObj) => favObj.id == obj.id)) {
         axios.delete(`http://localhost:8000/favorite/${obj.id}`);
         setFavorite(prev => prev.filter((item) => item.id !== obj.id));
       }
@@ -86,6 +86,7 @@ function App() {
             searchItem={searchItem}
             addToCart={addToCart}
             onAddToFavorite={onAddToFavorite}
+            favorite={favorite}
             favorited={false}
             isLoading={isLoading}
           />
