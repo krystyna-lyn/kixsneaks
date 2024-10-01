@@ -6,6 +6,7 @@ import Favorites from './components/pages/Favorites';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Home from './components/pages/Home';
+import Login from './components/pages/Login';
 
 
 function App() {
@@ -100,6 +101,10 @@ function App() {
             onAddToFavorite={onAddToFavorite}
             favorited={true}
           />
+        }
+        />
+        <Route path="/login" element={
+          <Login />
         }
         />
       </Routes>

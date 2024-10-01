@@ -23,9 +23,11 @@ function Header(props) {
                         <img src="./img/heart.svg" alt="favorites" />
                     </li>
                 </Link>
-                <li>
-                    <img src="./img/user.svg" alt="user" />
-                </li>
+                <Link to='/login'>
+                    <li>
+                        <img src="./img/user.svg" alt="user" />
+                    </li>
+                </Link>
             </ul>
         </header>
     )

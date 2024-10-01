@@ -214,5 +214,22 @@ header {
     }
   }
 
+}
+
+.login {
+
+  input {
+    width: 250px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 0;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    background: #f7f7f7;
+    color: #333;
+    transition: background 0.15s ease-in-out;
+    align-items: center;
+  }
 
 }
