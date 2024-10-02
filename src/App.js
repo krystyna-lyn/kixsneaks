@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
+import Register from './components/pages/Register';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
   const [cartItems, setcartItems] = useState([])
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     async function fetchData() {
@@ -105,6 +107,10 @@ function App() {
         />
         <Route path="/login" element={
           <Login />
+        }
+        />
+        <Route path="/register" element={
+          <Register />
         }
         />
       </Routes>

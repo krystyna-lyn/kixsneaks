@@ -216,7 +216,7 @@ header {
 
 }
 
-.login {
+.form {
 
   input {
     width: 250px;
@@ -230,6 +230,20 @@ header {
     color: #333;
     transition: background 0.15s ease-in-out;
     align-items: center;
+  }
+
+  .greenButton {
+    position: relative;
+    width: 250px;
+    height: 55px;
+    margin: 20px 20px;
+    background-color: #9dd558;
+    color: #fff;
+    border: 0;
+    border-radius: 18px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background 0.15s ease-in-out;
   }
 
 }
