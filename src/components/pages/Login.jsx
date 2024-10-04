@@ -39,7 +39,7 @@ function Login() {
                 />
                 <button className="greenButton">Login</button>
             </form>
-            <Link to='/register'>Register</Link>
+            <Link className="register" to='/register'>Register</Link>
         </div>
     )
 

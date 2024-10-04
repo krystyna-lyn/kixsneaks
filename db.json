@@ -71,22 +71,16 @@
   ],
   "favorite": [
     {
-      "id": "1",
-      "title": "Man sneakers Nike Blazer Mid Suede",
-      "price": 100,
-      "imgUrl": "./img/sneakers/1.jpg"
-    },
-    {
       "id": "8",
       "title": "Man sneakers Nike Blazer Mid Suede",
       "price": 800,
       "imgUrl": "./img/sneakers/8.jpg"
     },
     {
-      "id": "3",
+      "id": "1",
       "title": "Man sneakers Nike Blazer Mid Suede",
-      "price": 300,
-      "imgUrl": "./img/sneakers/3.jpg"
+      "price": 100,
+      "imgUrl": "./img/sneakers/1.jpg"
     }
   ]
 }
