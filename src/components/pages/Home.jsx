@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import Card from "../Card";
+import AppContext from "../../context";
 
 
 function Home({
@@ -8,10 +10,10 @@ function Home({
     setSearchValue,
     searchValue,
     onAddToFavorite,
-    cartItems,
-    isLoading,
-    favorite
+    isLoading
 }) {
+
+    const { isAddedToCart } = useContext(AppContext);
 
     const renderItems = () => {
         const filtredItems = items.filter((item) =>
@@ -20,11 +22,12 @@ function Home({
         return (isLoading ? [...Array(10)] : filtredItems).map((item, index) => (
             <Card
                 key={index}
+                // {...item} instead of listing all props of item id,img,price 
                 {...item}
                 addToCart={(obj) => addToCart}
                 addFavorite={(obj) => onAddToFavorite(obj)}
                 onPlus={(obj) => addToCart(obj)}
-                added={cartItems.some(obj => Number(obj.id) == Number(item.id))}
+                added={isAddedToCart(item && item.id)}
                 loading={isLoading}
             />
         ))
