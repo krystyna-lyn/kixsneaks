@@ -67,7 +67,6 @@ function App() {
     setSearchValue(event.target.value);
   }
 
-
   const deleteItem = (id) => {
     axios.delete(`http://localhost:8000/cart/${id}`);
     setcartItems(prev => prev.filter((item) => item.id !== id));
@@ -77,8 +76,9 @@ function App() {
   const isItemAdded = (id) => {
     return cartItems.some((obj) => Number(obj.id) === Number(id));
   }
+
   return (
-    <AppContext.Provider value={{ items, favorite, isItemAdded }}>
+    <AppContext.Provider value={{ items, cartItems, favorite, isItemAdded, onAddToFavorite }}>
 
       <div className="wrapper clear">
         {cartOpened && <Drawer cartItems={cartItems} onClose={() => setCartOpened(false)} onRemove={(id) => deleteItem(id)} />}
@@ -104,9 +104,7 @@ function App() {
           />
           <Route path="/favorites" element={
             <Favorites
-              favorite={favorite}
               addToCart={addToCart}
-              onAddToFavorite={onAddToFavorite}
               favorited={true}
             />
           }
