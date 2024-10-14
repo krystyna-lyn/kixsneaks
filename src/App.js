@@ -78,7 +78,15 @@ function App() {
   }
 
   return (
-    <AppContext.Provider value={{ items, cartItems, favorite, isItemAdded, onAddToFavorite }}>
+    <AppContext.Provider value={{
+      items,
+      cartItems,
+      favorite,
+      isItemAdded,
+      onAddToFavorite,
+      setCartOpened,
+      setcartItems
+    }}>
 
       <div className="wrapper clear">
         {cartOpened && <Drawer cartItems={cartItems} onClose={() => setCartOpened(false)} onRemove={(id) => deleteItem(id)} />}
@@ -117,6 +125,7 @@ function App() {
             <Register />
           }
           />
+
         </Routes>
 
 

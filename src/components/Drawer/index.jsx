@@ -1,5 +1,15 @@
+import { useContext, useState } from "react";
+import Info from "../Info";
+import AppContext from "../../context";
 
 function Drawer({ cartItems, onClose, onRemove }) {
+    const [isOrderComplete, setIsOrderComplete] = useState(false);
+    const { setcartItems } = useContext(AppContext);
+
+    const onCheckout = () => {
+        setIsOrderComplete(true);
+        setcartItems([]);
+    }
 
     return (
         <div className="overlay">
@@ -26,39 +36,36 @@ function Drawer({ cartItems, onClose, onRemove }) {
                                 <img className='removeBtn' onClick={() => onRemove(obj.id)} src="./img/btn-remove.svg" alt="remove" />
                             </div>
                         ))}
+                        <div className='cartTotalBlock'>
+                            <ul>
+                                <li>
+                                    <span>Total</span>
+                                    <div></div>
+                                    <b>250€</b>
+                                </li>
+                                <li>
+                                    <span>Tax 5%</span>
+                                    <div></div>
+                                    <b>12,5€</b>
+                                </li>
+                            </ul>
+                            <button className='greenButton' onClick={onCheckout}>Check out
+                                <img src='/img/arrow.svg' alt='Arrow' />
+                            </button>
+                        </div>
 
                     </div>
                 ) : (
-                    <div className="cartEmpty d-flex align-center justify-center flex-column flex">
-                        <img className='mb-20' src="./img/empty-cart.jpg" alt="empty-cart" />
-                        <h2>Empty cart</h2>
-                        <button className="greenButton">
-                            <img src="./img/arrow.svg" alt="arrow" />
-                            go back
-                        </button>
-                    </div>
+                    <Info
+                        title={isOrderComplete ? "Order is completed" : "Empty cart"}
+                        image={isOrderComplete ? "./img/complete-order.jpg" : "./img/empty-cart.jpg"}
+                        description={isOrderComplete ? "" : "add some products"} />
                 )}
 
 
-                <div className='cartTotalBlock'>
-                    <ul>
-                        <li>
-                            <span>Total</span>
-                            <div></div>
-                            <b>250€</b>
-                        </li>
-                        <li>
-                            <span>Tax 5%</span>
-                            <div></div>
-                            <b>12,5€</b>
-                        </li>
-                    </ul>
-                    <button className='greenButton'>Check out
-                        <img src='/img/arrow.svg' alt='Arrow' />
-                    </button>
-                </div>
+
             </div>
-        </div >
+        </div>
     )
 
 }

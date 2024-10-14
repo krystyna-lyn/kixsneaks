@@ -61,19 +61,21 @@
       "price": 100
     }
   ],
-  "cart": [
+  "cart": [],
+  "favorite": [
     {
-      "id": "2",
-      "title": "Man sneakers Nike Air Max 270",
-      "price": 200,
-      "imgUrl": "./img/sneakers/2.jpg"
-    },
-    {
-      "id": "1",
+      "id": "3",
       "title": "Man sneakers Nike Blazer Mid Suede",
-      "price": 100,
-      "imgUrl": "./img/sneakers/1.jpg"
+      "price": 300,
+      "imgUrl": "./img/sneakers/3.jpg"
     }
   ],
-  "favorite": []
+  "orders": [
+    {
+      "id": "3",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "price": 300,
+      "imgUrl": "./img/sneakers/3.jpg"
+    }
+  ]
 }
