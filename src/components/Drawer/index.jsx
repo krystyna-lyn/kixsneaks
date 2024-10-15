@@ -1,14 +1,26 @@
 import { useContext, useState } from "react";
 import Info from "../Info";
 import AppContext from "../../context";
+import axios from "axios";
 
-function Drawer({ cartItems, onClose, onRemove }) {
+function Drawer({ onClose, onRemove }) {
     const [isOrderComplete, setIsOrderComplete] = useState(false);
-    const { setcartItems } = useContext(AppContext);
+    const [orderId, setOrderId] = useState(null)
+    const { cartItems, setcartItems } = useContext(AppContext);
 
-    const onCheckout = () => {
-        setIsOrderComplete(true);
-        setcartItems([]);
+    const onCheckout = async () => {
+
+        try {
+            const { data } = await axios.post('http://localhost:8000/orders', cartItems)
+            setOrderId(data.id)
+            setIsOrderComplete(true);
+            setcartItems([]);
+            console.log(data)
+
+        } catch (error) {
+            alert('error by checking order')
+
+        }
     }
 
     return (
@@ -59,7 +71,7 @@ function Drawer({ cartItems, onClose, onRemove }) {
                     <Info
                         title={isOrderComplete ? "Order is completed" : "Empty cart"}
                         image={isOrderComplete ? "./img/complete-order.jpg" : "./img/empty-cart.jpg"}
-                        description={isOrderComplete ? "" : "add some products"} />
+                        description={isOrderComplete ? `ordered product #${orderId}` : "add some products"} />
                 )}
 
 

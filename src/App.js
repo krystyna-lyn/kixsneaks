@@ -89,7 +89,7 @@ function App() {
     }}>
 
       <div className="wrapper clear">
-        {cartOpened && <Drawer cartItems={cartItems} onClose={() => setCartOpened(false)} onRemove={(id) => deleteItem(id)} />}
+        {cartOpened && <Drawer onClose={() => setCartOpened(false)} onRemove={(id) => deleteItem(id)} />}
 
         <Header openCart={() => setCartOpened(true)} />
 
@@ -124,6 +124,8 @@ function App() {
           <Route path="/register" element={
             <Register />
           }
+          />
+          <Route path="/order" element=""
           />
 
         </Routes>
