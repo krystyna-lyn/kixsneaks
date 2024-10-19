@@ -6,23 +6,29 @@ import axios from "axios";
 function Drawer({ onClose, onRemove }) {
     const [isOrderComplete, setIsOrderComplete] = useState(false);
     const [orderId, setOrderId] = useState(null)
-    const { cartItems, setCartItems } = useContext(AppContext);
+    const { cartItems, setcartItems } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
 
+
     const onCheckout = async () => {
+
         try {
             setIsLoading(true);
-            const { data } = await axios.post('http://localhost:8000/orders', {
-                items: cartItems,
-            });
-            setOrderId(data.id);
+            const { data } = await axios.post('http://localhost:8000/orders', { items: cartItems })
+            setOrderId(data.id)
             setIsOrderComplete(true);
-            setCartItems([]);
-        } catch (error) {
-            alert('Error :(');
-        }
-        setIsLoading(false);
+            setcartItems([]);
+            console.log(data)
 
+            for (let i = 0; i < cartItems.length; i++) {
+                const item = cartItems[i];
+                await axios.delete('/cart/' + item.id);
+            }
+
+        } catch (error) {
+            alert('error')
+
+        }
     }
 
     return (
@@ -63,7 +69,8 @@ function Drawer({ onClose, onRemove }) {
                                     <b>12,5€</b>
                                 </li>
                             </ul>
-                            <button disabled={isLoading} className='greenButton' onClick={onCheckout}>Check out
+                            <button disabled={isLoading} className='greenButton' onClick={onCheckout}>
+                                Check out
                                 <img src='/img/arrow.svg' alt='Arrow' />
                             </button>
                         </div>
