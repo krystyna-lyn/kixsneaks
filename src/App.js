@@ -13,10 +13,10 @@ import AppContext from './context';
 
 function App() {
 
-  const [items, setitems] = useState([]);
+  const [items, setItems] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
   const [favorite, setFavorite] = useState(false);
-  const [cartItems, setcartItems] = useState([])
+  const [cartItems, setCartItems] = useState([])
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,21 +33,43 @@ function App() {
       setIsLoading(false)
 
       setFavorite(favoriteRes.data);
-      setcartItems(cartRes.data);
-      setitems(itemsRes.data);
+      setCartItems(cartRes.data);
+      setItems(itemsRes.data);
     }
 
     fetchData();
   }, [])
 
-  const addToCart = (obj) => {
-    axios.post('http://localhost:8000/cart', obj);
-    setcartItems(prev => [...prev, obj])
-  }
+  const addToCart = async (obj) => {
+    try {
+      const findItem = cartItems.find((item) => Number(item.parentId) === Number(obj.id));
+      if (findItem) {
+        setCartItems((prev) => prev.filter((item) => Number(item.parentId) !== Number(obj.id)));
+        await axios.delete(`http://localhost:8000/cart/${findItem.id}`);
+      } else {
+        setCartItems((prev) => [...prev, obj]);
+        const { data } = await axios.post('http://localhost:8000/cart', obj);
+        setCartItems((prev) =>
+          prev.map((item) => {
+            if (item.parentId === data.parentId) {
+              return {
+                ...item,
+                id: data.id,
+              };
+            }
+            return item;
+          }),
+        );
+      }
+    } catch (error) {
+      alert('Error by add to cart');
+      console.error(error);
+    }
+  };
 
   const onAddToFavorite = async (obj) => {
     try {
-      if (Array.isArray(favorite) && favorite.find((favObj) => favObj.id == obj.id)) {
+      if (Array.isArray(favorite) && favorite.find((favObj) => favObj.id === obj.id)) {
         axios.delete(`http://localhost:8000/favorite/${obj.id}`);
         setFavorite(prev => prev.filter((item) => item.id !== obj.id));
       }
@@ -69,7 +91,7 @@ function App() {
 
   const deleteItem = (id) => {
     axios.delete(`http://localhost:8000/cart/${id}`);
-    setcartItems(prev => prev.filter((item) => item.id !== id));
+    setCartItems(prev => prev.filter((item) => item.id !== id));
 
   };
 
@@ -85,7 +107,7 @@ function App() {
       isItemAdded,
       onAddToFavorite,
       setCartOpened,
-      setcartItems
+      setCartItems
     }}>
 
       <div className="wrapper clear">
