@@ -62,10 +62,11 @@ function App() {
         );
       }
     } catch (error) {
-      alert('Error by add to cart');
+      alert('error');
       console.error(error);
     }
   };
+
 
   const onAddToFavorite = async (obj) => {
     try {
@@ -111,7 +112,12 @@ function App() {
     }}>
 
       <div className="wrapper clear">
-        {cartOpened && <Drawer onClose={() => setCartOpened(false)} onRemove={(id) => deleteItem(id)} />}
+        {cartOpened &&
+          <Drawer
+            onClose={() => setCartOpened(false)}
+            onRemove={(id) => deleteItem(id)}
+            opened={cartOpened}
+          />}
 
         <Header openCart={() => setCartOpened(true)} />
 

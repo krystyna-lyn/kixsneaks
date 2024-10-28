@@ -3,7 +3,9 @@ import Info from "../Info";
 import AppContext from "../../context";
 import axios from "axios";
 
-function Drawer({ onClose, onRemove }) {
+import styles from './Drawer.module.scss';
+
+function Drawer({ onClose, onRemove, opened }) {
     const [isOrderComplete, setIsOrderComplete] = useState(false);
     const [orderId, setOrderId] = useState(null)
     const { cartItems, setcartItems } = useContext(AppContext);
@@ -32,7 +34,7 @@ function Drawer({ onClose, onRemove }) {
     }
 
     return (
-        <div className="overlay">
+        <div className='overlay'>
             <div className='drawer'>
                 <h2 className='d-flex justify-between mb-30'>Cart
                     <img onClick={onClose} className='removeBtn cu-p' src="./img/btn-remove.svg" alt="remove" />
@@ -40,8 +42,7 @@ function Drawer({ onClose, onRemove }) {
 
 
                 {cartItems.length > 0 ? (
-
-                    <div className='items'>
+                    <div className="items flex">
                         {cartItems.map((obj) => (
                             <div key={obj.id} className='cartItem d-flex align-center mb-20' >
                                 <div
@@ -76,6 +77,7 @@ function Drawer({ onClose, onRemove }) {
                         </div>
 
                     </div>
+
                 ) : (
                     <Info
                         title={isOrderComplete ? "Order is completed" : "Empty cart"}
