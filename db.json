@@ -63,11 +63,11 @@
   ],
   "cart": [
     {
-      "id": "3",
-      "parentId": "3",
+      "id": "1",
+      "parentId": "1",
       "title": "Man sneakers Nike Blazer Mid Suede",
-      "imgUrl": "./img/sneakers/3.jpg",
-      "price": 300
+      "imgUrl": "./img/sneakers/1.jpg",
+      "price": 100
     },
     {
       "id": "2",
@@ -75,6 +75,13 @@
       "title": "Man sneakers Nike Air Max 270",
       "imgUrl": "./img/sneakers/2.jpg",
       "price": 200
+    },
+    {
+      "id": "3",
+      "parentId": "3",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "imgUrl": "./img/sneakers/3.jpg",
+      "price": 300
     }
   ],
   "favorite": [
@@ -86,13 +93,6 @@
       "price": 100
     },
     {
-      "id": "3",
-      "parentId": "3",
-      "title": "Man sneakers Nike Blazer Mid Suede",
-      "imgUrl": "./img/sneakers/3.jpg",
-      "price": 300
-    },
-    {
       "id": "4",
       "parentId": "4",
       "title": "Man sneakers Puma X Aka Boku Future Rider",
@@ -100,49 +100,5 @@
       "price": 500
     }
   ],
-  "orders": [
-    {
-      "id": "edac",
-      "items": [
-        {
-          "id": "3",
-          "parentId": "3",
-          "title": "Man sneakers Nike Blazer Mid Suede",
-          "imgUrl": "./img/sneakers/3.jpg",
-          "price": 300
-        }
-      ]
-    },
-    {
-      "id": "d04c",
-      "items": [
-        {
-          "id": "2",
-          "parentId": "2",
-          "title": "Man sneakers Nike Air Max 270",
-          "imgUrl": "./img/sneakers/2.jpg",
-          "price": 200
-        }
-      ]
-    },
-    {
-      "id": "da35",
-      "items": [
-        {
-          "id": "2",
-          "parentId": "2",
-          "title": "Man sneakers Nike Air Max 270",
-          "imgUrl": "./img/sneakers/2.jpg",
-          "price": 200
-        },
-        {
-          "id": "3",
-          "parentId": "3",
-          "title": "Man sneakers Nike Blazer Mid Suede",
-          "imgUrl": "./img/sneakers/3.jpg",
-          "price": 300
-        }
-      ]
-    }
-  ]
+  "orders": []
 }

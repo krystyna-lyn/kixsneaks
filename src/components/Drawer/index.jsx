@@ -3,34 +3,35 @@ import Info from "../Info";
 import AppContext from "../../context";
 import axios from "axios";
 
-import styles from './Drawer.module.scss';
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function Drawer({ onClose, onRemove, opened }) {
     const [isOrderComplete, setIsOrderComplete] = useState(false);
     const [orderId, setOrderId] = useState(null)
-    const { cartItems, setcartItems } = useContext(AppContext);
+    const { cartItems, setCartItems } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
 
 
     const onCheckout = async () => {
-
         try {
-            setIsLoading(true);
-            const { data } = await axios.post('http://localhost:8000/orders', { items: cartItems })
+            setIsLoading(true)
+            const { data } = await axios.post('http://localhost:8000/orders', { items: cartItems });
             setOrderId(data.id)
             setIsOrderComplete(true);
-            setcartItems([]);
-            console.log(data)
+            setCartItems([]);
 
             for (let i = 0; i < cartItems.length; i++) {
                 const item = cartItems[i];
-                await axios.delete('/cart/' + item.id);
+                await axios.delete('http://localhost:8000/cart/' + item.id)
+                await delay(1000);
             }
-
-        } catch (error) {
-            alert('error')
-
         }
+        catch {
+            alert('something wrong')
+        }
+        setIsLoading(false)
+
     }
 
     return (
