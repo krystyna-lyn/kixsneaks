@@ -9,6 +9,7 @@ import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import AppContext from './context';
+import Orders from './components/pages/Orders';
 
 
 function App() {
@@ -151,7 +152,9 @@ function App() {
             <Register />
           }
           />
-          <Route path="/order" element=""
+          <Route path="/orders" element={
+            <Orders />
+          }
           />
 
         </Routes>
