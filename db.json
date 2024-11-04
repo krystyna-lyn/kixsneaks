@@ -76,6 +76,13 @@
       "title": "Man sneakers Puma X Aka Boku Future Rider",
       "imgUrl": "./img/sneakers/4.jpg",
       "price": 500
+    },
+    {
+      "id": "3",
+      "parentId": "3",
+      "title": "Man sneakers Nike Blazer Mid Suede",
+      "imgUrl": "./img/sneakers/3.jpg",
+      "price": 300
     }
   ],
   "orders": [

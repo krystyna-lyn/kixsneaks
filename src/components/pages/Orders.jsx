@@ -1,16 +1,24 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Card from "../Card";
 import AppContext from "../../context";
 import axios from "axios";
 
 function Orders({ }) {
-    const { favorite, onAddToFavorite } = useContext(AppContext);
-    useEffect(() => {
+    const { addToCart } = useContext(AppContext);
+    const [orders, setOrders] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-        (async () => {
-            const { data } = await axios.get('http://localhost:8000/orders');
-            console.log(data)
-        })();
+    useEffect(() => {
+        try {
+            (async () => {
+                const { data } = await axios.get('http://localhost:8000/orders');
+                //console.log(data.map((obj) => obj.items.flat()))
+                setOrders(data.reduce((prev, obj) => [...prev, ...obj.items], []))
+                setIsLoading(false);
+            })();
+        } catch (error) {
+            alert("Error fetching orders. Please try again later.")
+        }
     }, [])
 
     return (
@@ -21,12 +29,16 @@ function Orders({ }) {
             </div>
             <div className="sneakers d-flex justify-between flex-wrap">
 
-                {[]
-                    .map(item => {
-                        return (
-                            <Card />
-                        )
-                    })
+                {orders.map((item, index) => {
+                    return (
+                        <Card
+                            key={index}
+                            {...item}
+                            addToCart={(obj) => addToCart}
+                            loading={isLoading}
+                        />
+                    )
+                })
                 }
             </div>
         </div>
