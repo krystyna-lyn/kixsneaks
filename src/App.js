@@ -92,8 +92,13 @@ function App() {
   }
 
   const deleteItem = (id) => {
-    axios.delete(`http://localhost:8000/cart/${id}`);
-    setCartItems(prev => prev.filter((item) => item.id !== id));
+    try {
+      axios.delete(`http://localhost:8000/cart/${id}`);
+      setCartItems(prev => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      alert('Error deleting item from cart')
+    }
+
 
   };
 
@@ -115,6 +120,7 @@ function App() {
       <div className="wrapper clear">
         {cartOpened &&
           <Drawer
+            items={cartItems}
             onClose={() => setCartOpened(false)}
             onRemove={(id) => deleteItem(id)}
             opened={cartOpened}

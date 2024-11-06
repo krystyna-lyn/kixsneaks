@@ -4,11 +4,11 @@ import AppContext from "../../context";
 import axios from "axios";
 import { useCart } from "../../hooks/useCart";
 
-
+import styles from '../Drawer/Drawer.module.scss'
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function Drawer({ onClose, onRemove, opened }) {
+function Drawer({ onClose, onRemove, items = [], opened }) {
     const [isOrderComplete, setIsOrderComplete] = useState(false);
     const [orderId, setOrderId] = useState(null)
     const { cartItems, setCartItems } = useContext(AppContext);
@@ -39,16 +39,16 @@ function Drawer({ onClose, onRemove, opened }) {
     }
 
     return (
-        <div className='overlay'>
-            <div className='drawer'>
+        <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
+            <div className={styles.drawer}>
                 <h2 className='d-flex justify-between mb-30'>Cart
                     <img onClick={onClose} className='removeBtn cu-p' src="./img/btn-remove.svg" alt="remove" />
                 </h2>
 
 
-                {cartItems.length > 0 ? (
+                {items.length > 0 ? (
                     <div className="items flex">
-                        {cartItems.map((obj) => (
+                        {items.map((obj) => (
                             <div key={obj.id} className='cartItem d-flex align-center mb-20' >
                                 <div
                                     style={{ backgroundImage: `url(${obj.imgUrl})` }}
