@@ -24,18 +24,22 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-
       //axios.get('http://localhost:8000/items').then((res) => {
       //setitems(res.data)})
-      const favoriteRes = await axios.get('http://localhost:8000/favorite');
-      const cartRes = await axios.get('http://localhost:8000/cart');
-      const itemsRes = await axios.get('http://localhost:8000/items');
-
-      setIsLoading(false)
-
-      setFavorite(favoriteRes.data);
-      setCartItems(cartRes.data);
-      setItems(itemsRes.data);
+      try {
+        const [favoriteRes, cartRes, itemsRes] = await Promise.all([
+          axios.get('http://localhost:8000/favorite'),
+          axios.get('http://localhost:8000/cart'),
+          axios.get('http://localhost:8000/items'),
+        ])
+        setIsLoading(false);
+        setFavorite(favoriteRes.data);
+        setCartItems(cartRes.data);
+        setItems(itemsRes.data);
+      } catch (error) {
+        alert('Failed to load data. Please check your internet connection.')
+        console.error(error);
+      }
     }
 
     fetchData();

@@ -61,15 +61,7 @@
       "price": 100
     }
   ],
-  "cart": [
-    {
-      "id": "2",
-      "parentId": "2",
-      "title": "Man sneakers Nike Air Max 270",
-      "imgUrl": "./img/sneakers/2.jpg",
-      "price": 200
-    }
-  ],
+  "cart": [],
   "favorite": [
     {
       "id": "1",
