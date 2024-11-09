@@ -67,7 +67,7 @@ function App() {
         );
       }
     } catch (error) {
-      alert('error');
+      alert('Failed to add item to cart');
       console.error(error);
     }
   };
@@ -85,7 +85,8 @@ function App() {
       }
     }
     catch (error) {
-      console.log('The product can not be added to favorites')
+      console.error(error);
+      alert('Failed to add item to favorite');
     }
 
   }
@@ -100,7 +101,8 @@ function App() {
       axios.delete(`http://localhost:8000/cart/${id}`);
       setCartItems(prev => prev.filter((item) => item.id !== id));
     } catch (error) {
-      alert('Error deleting item from cart')
+      alert('Error deleting item from cart');
+      console.error(error);
     }
 
 
