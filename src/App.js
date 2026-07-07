@@ -4,7 +4,16 @@ import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Favorites from './components/pages/Favorites';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from "axios";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc
+} from "firebase/firestore";
+
+import { db } from "./firebase";
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
@@ -24,26 +33,45 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      //axios.get('http://localhost:8000/items').then((res) => {
-      //setitems(res.data)})
       try {
-        const [favoriteRes, cartRes, itemsRes] = await Promise.all([
-          axios.get('http://localhost:8000/favorite'),
-          axios.get('http://localhost:8000/cart'),
-          axios.get('http://localhost:8000/items'),
-        ])
+        const [favoriteSnapshot, cartSnapshot, itemsSnapshot] =
+
+          await Promise.all([
+            getDocs(collection(db, "favorite")),
+            getDocs(collection(db, "cart")),
+            getDocs(collection(db, "items"))
+          ]);
+
+        setFavorite(
+          favoriteSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        );
+
+        setCartItems(
+          cartSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        );
+
+        setItems(
+          itemsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        );
+
         setIsLoading(false);
-        setFavorite(favoriteRes.data);
-        setCartItems(cartRes.data);
-        setItems(itemsRes.data);
       } catch (error) {
-        alert('Failed to load data. Please check your internet connection.')
         console.error(error);
+        alert("Failed to load data.");
       }
     }
 
     fetchData();
-  }, [])
+  }, []);
 
   const addToCart = async (obj) => {
     try {
