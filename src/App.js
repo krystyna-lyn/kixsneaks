@@ -75,27 +75,39 @@ function App() {
 
   const addToCart = async (obj) => {
     try {
-      const findItem = cartItems.find((item) => Number(item.parentId) === Number(obj.id));
+      const findItem = cartItems.find(
+        item => Number(item.parentId) === Number(obj.id)
+      );
+
       if (findItem) {
-        setCartItems((prev) => prev.filter((item) => Number(item.parentId) !== Number(obj.id)));
-        await axios.delete(`http://localhost:8000/cart/${findItem.id}`);
-      } else {
-        setCartItems((prev) => [...prev, obj]);
-        const { data } = await axios.post('http://localhost:8000/cart', obj);
-        setCartItems((prev) =>
-          prev.map((item) => {
-            if (item.parentId === data.parentId) {
-              return {
-                ...item,
-                id: data.id,
-              };
-            }
-            return item;
-          }),
+
+        await deleteDoc(doc(db, "cart", findItem.id));
+
+        setCartItems(prev =>
+          prev.filter(item => item.parentId !== obj.id)
         );
+
+      } else {
+
+        const docRef = await addDoc(
+          collection(db, "cart"),
+          {
+            ...obj,
+            parentId: obj.id,
+          }
+        );
+
+        setCartItems(prev => [
+          ...prev,
+          {
+            ...obj,
+            id: docRef.id,
+            parentId: obj.id,
+          },
+        ]);
       }
+
     } catch (error) {
-      alert('Failed to add item to cart');
       console.error(error);
     }
   };
