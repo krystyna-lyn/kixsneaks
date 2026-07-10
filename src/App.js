@@ -114,19 +114,50 @@ function App() {
 
 
   const onAddToFavorite = async (obj) => {
+
     try {
-      if (Array.isArray(favorite) && favorite.find((favObj) => favObj.id === obj.id)) {
-        axios.delete(`http://localhost:8000/favorite/${obj.id}`);
-        setFavorite(prev => prev.filter((item) => item.id !== obj.id));
+
+      const findItem =
+        favorite.find(
+          item => item.parentId == obj.id
+        );
+
+      if (findItem) {
+
+        await deleteDoc(
+          doc(db, "favorite", findItem.id)
+        );
+
+        setFavorite(prev =>
+          prev.filter(item => item.id !== findItem.id)
+        );
+
+      } else {
+
+        const docRef =
+          await addDoc(
+            collection(db, "favorite"),
+            {
+              ...obj,
+              parentId: obj.id
+            }
+          );
+
+        setFavorite(prev => [
+          ...prev,
+          {
+            ...obj,
+            parentId: obj.id,
+            id: docRef.id
+          }
+        ]);
+
       }
-      else {
-        const { data } = await axios.post('http://localhost:8000/favorite', obj,);
-        setFavorite((prev) => [...prev, data]);
-      }
-    }
-    catch (error) {
-      console.error(error);
-      alert('Failed to add item to favorite');
+
+    } catch (error) {
+
+      console.log(error);
+
     }
 
   }
