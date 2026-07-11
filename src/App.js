@@ -84,7 +84,7 @@ function App() {
         await deleteDoc(doc(db, "cart", findItem.id));
 
         setCartItems(prev =>
-          prev.filter(item => item.parentId !== obj.id)
+          prev.filter(item => Number(item.parentId) !== Number(obj.id))
         );
 
       } else {
@@ -167,18 +167,18 @@ function App() {
     setSearchValue(event.target.value);
   }
 
-  const deleteItem = (id) => {
+  const deleteItem = async (id) => {
     try {
-      axios.delete(`http://localhost:8000/cart/${id}`);
-      setCartItems(prev => prev.filter((item) => item.id !== id));
+      await deleteDoc(doc(db, "cart", id));
+
+      setCartItems(prev =>
+        prev.filter(item => item.id !== id)
+      );
     } catch (error) {
-      alert('Error deleting item from cart');
+      alert("Error deleting item from cart");
       console.error(error);
     }
-
-
   };
-
   const isItemAdded = (id) => {
     return cartItems.some((obj) => Number(obj.parentId) === Number(id));
   };
