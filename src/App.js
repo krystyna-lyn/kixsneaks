@@ -4,7 +4,6 @@ import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Favorites from './components/pages/Favorites';
 import { useEffect, useState } from 'react';
-import axios from "axios";
 import {
   collection,
   getDocs,
@@ -25,7 +24,7 @@ function App() {
 
   const [items, setItems] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
-  const [favorite, setFavorite] = useState(false);
+  const [favorite, setFavorite] = useState([]);
   const [cartItems, setCartItems] = useState([])
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -75,7 +74,7 @@ function App() {
 
   const addToCart = async (obj) => {
     try {
-      const findItem = cartItems.find(
+      const findItem = favorite.find(
         item => Number(item.parentId) === Number(obj.id)
       );
 
@@ -119,7 +118,7 @@ function App() {
 
       const findItem =
         favorite.find(
-          item => item.parentId == obj.id
+          item => item.parentId === obj.id
         );
 
       if (findItem) {
@@ -182,6 +181,8 @@ function App() {
   const isItemAdded = (id) => {
     return cartItems.some((obj) => Number(obj.parentId) === Number(id));
   };
+
+  console.log(cartItems);
 
   return (
     <AppContext.Provider value={{
