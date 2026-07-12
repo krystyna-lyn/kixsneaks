@@ -12,20 +12,18 @@ function Home({
 }) {
 
     const renderItems = () => {
-        const filtredItems = items.filter((item) =>
+        const filteredItems = items.filter((item) =>
             item.title.toLowerCase().includes(searchValue.toLowerCase()));
 
-        return (isLoading ? [...Array(10)] : filtredItems).map((item, index) => (
+        return (isLoading ? [...Array(10)] : filteredItems).map((item, index) => (
             <Card
-                key={index}
-                // {...item} instead of listing all props of item id,img,price 
+                key={isLoading ? index : item.id}
                 {...item}
-                addToCart={(obj) => addToCart}
-                addFavorite={(obj) => onAddToFavorite(obj)}
-                onPlus={(obj) => addToCart(obj)}
+                addFavorite={onAddToFavorite}
+                onPlus={addToCart}
                 loading={isLoading}
             />
-        ))
+        ));
     }
 
     return (
