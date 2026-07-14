@@ -74,8 +74,9 @@ function App() {
 
   const addToCart = async (obj) => {
     try {
-      const findItem = favorite.find(
-        item => Number(item.parentId) === Number(obj.id)
+
+      const findItem = cartItems.find(
+        item => item.productId === obj.id
       );
 
       if (findItem) {
@@ -83,27 +84,29 @@ function App() {
         await deleteDoc(doc(db, "cart", findItem.id));
 
         setCartItems(prev =>
-          prev.filter(item => Number(item.parentId) !== Number(obj.id))
+          prev.filter(item => item.id !== findItem.id)
         );
 
       } else {
 
-        const docRef = await addDoc(
-          collection(db, "cart"),
-          {
-            ...obj,
-            parentId: obj.id,
-          }
-        );
+        const docRef = await addDoc(collection(db, "cart"), {
+          productId: obj.id,
+          title: obj.title,
+          price: obj.price,
+          imgUrl: obj.imgUrl
+        });
 
         setCartItems(prev => [
           ...prev,
           {
-            ...obj,
             id: docRef.id,
-            parentId: obj.id,
-          },
+            productId: obj.id,
+            title: obj.title,
+            price: obj.price,
+            imgUrl: obj.imgUrl
+          }
         ]);
+
       }
 
     } catch (error) {
@@ -116,16 +119,13 @@ function App() {
 
     try {
 
-      const findItem =
-        favorite.find(
-          item => item.parentId === obj.id
-        );
+      const findItem = favorite.find(
+        item => item.productId === obj.id
+      );
 
       if (findItem) {
 
-        await deleteDoc(
-          doc(db, "favorite", findItem.id)
-        );
+        await deleteDoc(doc(db, "favorite", findItem.id));
 
         setFavorite(prev =>
           prev.filter(item => item.id !== findItem.id)
@@ -133,33 +133,31 @@ function App() {
 
       } else {
 
-        const docRef =
-          await addDoc(
-            collection(db, "favorite"),
-            {
-              ...obj,
-              parentId: obj.id
-            }
-          );
+        const docRef = await addDoc(collection(db, "favorite"), {
+          productId: obj.id,
+          title: obj.title,
+          price: obj.price,
+          imgUrl: obj.imgUrl
+        });
 
         setFavorite(prev => [
           ...prev,
           {
-            ...obj,
-            parentId: obj.id,
-            id: docRef.id
+            id: docRef.id,
+            productId: obj.id,
+            title: obj.title,
+            price: obj.price,
+            imgUrl: obj.imgUrl
           }
         ]);
 
       }
 
     } catch (error) {
-
       console.log(error);
-
     }
 
-  }
+  };
 
   const searchItem = (event) => {
     //console.log(event.target.value)
@@ -179,7 +177,7 @@ function App() {
     }
   };
   const isItemAdded = (id) => {
-    return cartItems.some((obj) => Number(obj.parentId) === Number(id));
+    return cartItems.some(item => item.productId === id);
   };
 
   console.log(cartItems);
