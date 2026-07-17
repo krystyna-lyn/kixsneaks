@@ -1,16 +1,22 @@
 import { useContext, useState } from "react";
 import Info from "../Info";
 import AppContext from "../../context";
-import axios from "axios";
+import { db } from "../../firebase";
 import { useCart } from "../../hooks/useCart";
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc
+} from "firebase/firestore";
 
 import styles from '../Drawer/Drawer.module.scss'
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function Drawer({ onClose, onRemove, items = [], opened }) {
+
     const [isOrderComplete, setIsOrderComplete] = useState(false);
-    const [orderId, setOrderId] = useState(null)
+    const [orderId, setOrderId] = useState(null);
     const { cartItems, setCartItems } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -19,25 +25,47 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
 
     const onCheckout = async () => {
         try {
-            setIsLoading(true)
-            const { data } = await axios.post('http://localhost:8000/orders', { items: cartItems });
-            setOrderId(data.id)
-            setIsOrderComplete(true);
+
+            setIsLoading(true);
+
+            // create order
+
+            const orderItems = cartItems.map(item => ({
+                productId: item.productId,
+                title: item.title,
+                price: item.price,
+                imgUrl: item.imgUrl,
+            }));
+
+            const orderRef = await addDoc(collection(db, "orders"), {
+                createdAt: new Date(),
+                items: orderItems,
+            });
+
+            setOrderId(orderRef.id);
+
+
+            // delete items from cart
+            for (const item of cartItems) {
+                await deleteDoc(doc(db, "cart", item.id));
+            }
+
+            // refresh React
             setCartItems([]);
 
-            for (let i = 0; i < cartItems.length; i++) {
-                const item = cartItems[i];
-                await axios.delete('http://localhost:8000/cart/' + item.id)
-                await delay(1000);
-            }
-        }
-        catch {
-            alert('something wrong')
-        }
-        setIsLoading(false)
+            setIsOrderComplete(true);
 
-    }
+        } catch (error) {
 
+            console.error(error);
+            alert("Something went wrong");
+
+        } finally {
+
+            setIsLoading(false);
+
+        }
+    };
     return (
         <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
             <div className={styles.drawer}>
