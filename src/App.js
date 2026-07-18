@@ -13,6 +13,9 @@ import {
 } from "firebase/firestore";
 
 import { db } from "./firebase";
+import { auth } from "./firebase";
+
+import { onAuthStateChanged } from "firebase/auth";
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
@@ -28,6 +31,8 @@ function App() {
   const [cartItems, setCartItems] = useState([])
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+
+  const [user, setUser] = useState(null);
 
 
   useEffect(() => {
@@ -71,6 +76,20 @@ function App() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+
+      setUser(currentUser);
+
+    });
+
+    return () => unsubscribe();
+
+  }, []);
+
+  console.log(user);
 
   const addToCart = async (obj) => {
     try {
@@ -184,6 +203,7 @@ function App() {
 
   return (
     <AppContext.Provider value={{
+      user,
       items,
       cartItems,
       favorite,
