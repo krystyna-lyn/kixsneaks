@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import Card from "../Card";
 import AppContext from "../../context";
-import axios from "axios";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
 function Orders({ }) {
     const { addToCart } = useContext(AppContext);
@@ -9,17 +10,40 @@ function Orders({ }) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        try {
-            (async () => {
-                const { data } = await axios.get('http://localhost:8000/orders');
-                //console.log(data.map((obj) => obj.items.flat()))
-                setOrders(data.reduce((prev, obj) => [...prev, ...obj.items], []))
+
+        async function fetchOrders() {
+
+            try {
+
+                const snapshot = await getDocs(
+                    collection(db, "orders")
+                );
+
+                const data = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                setOrders(
+                    data.flatMap(order => order.items)
+                );
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Error loading orders");
+
+            } finally {
+
                 setIsLoading(false);
-            })();
-        } catch (error) {
-            alert("Error fetching orders. Please try again later.")
+
+            }
+
         }
-    }, [])
+
+        fetchOrders();
+
+    }, []);
 
     return (
 
@@ -32,9 +56,9 @@ function Orders({ }) {
                 {orders.map((item, index) => {
                     return (
                         <Card
-                            key={index}
+                            key={item.productId}
                             {...item}
-                            addToCart={(obj) => addToCart}
+                            onPlus={addToCart}
                             loading={isLoading}
                         />
                     )
