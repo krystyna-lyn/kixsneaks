@@ -64,6 +64,115 @@ header {
   }
 }
 
+//HEADER
+
+.headerMenu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 30px;
+}
+
+.headerMenu li {
+  display: flex;
+  align-items: center;
+}
+
+// MENU buttons & links  
+
+.userMenuButton {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+// modern dropdown menu
+
+.userDropdown {
+  position: absolute;
+  right: 0;
+  top: 52px;
+  width: 190px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, .12);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.userDropdown a,
+.userDropdown button {
+
+  width: 100%;
+  display: block;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: #333;
+  background: white;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.userDropdown a:hover,
+.userDropdown button:hover {
+
+  background: #f7f7f7;
+
+}
+
+// User button
+.userMenuButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+// AVATAR 
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #9dd558;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+//name 
+.headerMenu .userName,
+.headerMenu .cartTotal {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.headerMenu .userDropdown a,
+.headerMenu .userDropdown button {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.arrow {
+  font-size: 10px;
+  transition: transform .2s;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
 .search-block {
   border: 1px solid #f3f3f3;
   border-radius: 10px;

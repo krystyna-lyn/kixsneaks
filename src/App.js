@@ -11,6 +11,7 @@ import {
   deleteDoc,
   doc
 } from "firebase/firestore";
+import { getDoc } from "firebase/firestore";
 
 import { db } from "./firebase";
 import { auth } from "./firebase";
@@ -33,6 +34,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [user, setUser] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
 
 
   useEffect(() => {
@@ -78,18 +80,31 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
 
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
 
-      setUser(currentUser);
+        setUser(currentUser);
+
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          setUserProfile(userSnap.data());
+        }
+
+      } else {
+
+        setUser(null);
+        setUserProfile(null);
+
+      }
 
     });
 
     return () => unsubscribe();
 
   }, []);
-
-  console.log(user);
 
   const addToCart = async (obj) => {
     try {
@@ -203,12 +218,18 @@ function App() {
 
   return (
     <AppContext.Provider value={{
-      user,
       items,
       cartItems,
       favorite,
+
+      user,
+      userProfile,
+      setUser,
+      setUserProfile,
+
       isItemAdded,
       onAddToFavorite,
+
       setCartOpened,
       setCartItems
     }}>
