@@ -1,6 +1,15 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { db, auth } from "../../firebase";
+import {
+    doc,
+    serverTimestamp,
+    setDoc
+} from "firebase/firestore";
+import AuthForm from "../AuthForm/AuthForm";
+import Input from "../Input/Input";
 
 
 function Register() {
@@ -10,37 +19,77 @@ function Register() {
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
-        // store data in Localstorage
-        localStorage.setItem('user', JSON.stringify({ name, email, password }));
-        alert('Success! now you can log in!');
-        navigate('/login');
+
+        try {
+            // create user 
+            const userCredential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+            // get uid of the created user from Firebase Authentication
+            const user = userCredential.user;
+
+            // save user id and any other user data in Firebase Realtime Database
+            await setDoc(
+                doc(db, "users", user.uid),
+                {
+                    name,
+                    email,
+                    createdAt: serverTimestamp()
+                }
+            );
+            alert("Registration successful!");
+
+            navigate("/login");
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(error.message);
+
+        }
+
     };
 
-    return (
-        <div className="d-flex flex-column justify-center align-center">
-            <h1>Register</h1>
-            <form onSubmit={handleSubmit} className="form d-flex flex-column justify-center align-center">
-                <input type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name" />
-                <input type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email" />
-                <input
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
 
-                <button className="greenButton" onClick={() => console.log(name, email)}>Register</button>
-            </form>
-        </div>
+    return (
+        <AuthForm
+            title="Create account"
+            buttonText="Register"
+            onSubmit={handleSubmit}
+        >
+
+            <Input
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+
+            <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setName(e.target.value)}
+            />
+
+            <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setName(e.target.value)}
+            />
+
+        </AuthForm>
+
     )
 
 
