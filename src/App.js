@@ -16,12 +16,15 @@ import { getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { auth } from "./firebase";
 
-import { onAuthStateChanged } from "firebase/auth";
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import AppContext from './context';
 import Orders from './components/pages/Orders';
+
+
+import { onAuthStateChanged } from "firebase/auth";
+import { query, where } from "firebase/firestore";
 
 
 function App() {
@@ -36,47 +39,76 @@ function App() {
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
 
-
   useEffect(() => {
-    async function fetchData() {
+
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+
       try {
-        const [favoriteSnapshot, cartSnapshot, itemsSnapshot] =
 
-          await Promise.all([
-            getDocs(collection(db, "favorite")),
-            getDocs(collection(db, "cart")),
-            getDocs(collection(db, "items"))
-          ]);
+        setIsLoading(true);
 
-        setFavorite(
-          favoriteSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
-        );
-
-        setCartItems(
-          cartSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
+        const itemsSnapshot = await getDocs(
+          collection(db, "items")
         );
 
         setItems(
           itemsSnapshot.docs.map(doc => ({
             id: doc.id,
-            ...doc.data(),
+            ...doc.data()
           }))
         );
 
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        alert("Failed to load data.");
-      }
-    }
+        if (user) {
 
-    fetchData();
+          const favoriteSnapshot = await getDocs(
+            query(
+              collection(db, "favorite"),
+              where("userId", "==", user.uid)
+            )
+          );
+
+          const cartSnapshot = await getDocs(
+            query(
+              collection(db, "cart"),
+              where("userId", "==", user.uid)
+            )
+          );
+
+          setFavorite(
+            favoriteSnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+            }))
+          );
+
+          setCartItems(
+            cartSnapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+            }))
+          );
+
+        } else {
+
+          setFavorite([]);
+          setCartItems([]);
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      } finally {
+
+        setIsLoading(false);
+
+      }
+
+    });
+
+    return () => unsubscribe();
+
   }, []);
 
   useEffect(() => {
