@@ -187,7 +187,7 @@ function App() {
     try {
 
       const findItem = favorite.find(
-        item => item.productId === obj.id
+        item => String(item.productId) === String(obj.id)
       );
 
       if (findItem) {
@@ -244,7 +244,9 @@ function App() {
     }
   };
   const isItemAdded = (id) => {
-    return cartItems.some(item => item.productId === id);
+    return cartItems.some(
+      item => String(item.productId) === String(id)
+    );
   };
 
   console.log(cartItems);
