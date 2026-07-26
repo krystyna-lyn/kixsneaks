@@ -140,9 +140,8 @@ function App() {
 
   const addToCart = async (obj) => {
     try {
-
       const findItem = cartItems.find(
-        item => item.productId === obj.id
+        item => String(item.productId) === String(obj.id)
       );
 
       if (findItem) {
@@ -156,6 +155,7 @@ function App() {
       } else {
 
         const docRef = await addDoc(collection(db, "cart"), {
+          userId: auth.currentUser.uid,
           productId: obj.id,
           title: obj.title,
           price: obj.price,
@@ -166,6 +166,7 @@ function App() {
           ...prev,
           {
             id: docRef.id,
+            userId: auth.currentUser.uid,
             productId: obj.id,
             title: obj.title,
             price: obj.price,
