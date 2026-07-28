@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import styles from "../Card/Card.module.scss";
 import Loader from "../Loader";
+import { useNavigate } from "react-router-dom";
 import AppContext from "../../context";
 
 function Card({
@@ -13,9 +14,10 @@ function Card({
     loading = false,
 }) {
 
-    const { favorite, isItemAdded } = useContext(AppContext);
+    const { favorite, isItemAdded, user } = useContext(AppContext);
+    const navigate = useNavigate();
 
-    // Товар из коллекции items
+    // product from items collection
     const obj = {
         id,
         title,
@@ -23,18 +25,30 @@ function Card({
         imgUrl,
     };
 
-    // Проверяем, находится ли товар в избранном
+    // check if product in favoriites
+
     const isFavorite = favorite.some(
         item => item.productId === id
     );
 
+
     const onClickPlus = () => {
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+
         onPlus(obj);
-    };
+    }
 
     const onClickFavorite = () => {
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+
         addFavorite(obj);
-    };
+    }
 
     return (
         <>
