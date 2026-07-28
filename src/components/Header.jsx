@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import AppContext from "../context";
@@ -6,6 +6,9 @@ import { useCart } from "../hooks/useCart";
 import { useState, useContext, useRef, useEffect } from "react";
 
 function Header(props) {
+
+    const { user } = useContext(AppContext);
+    const navigate = useNavigate();
 
     const { totalPrice } = useCart();
 
@@ -59,7 +62,12 @@ function Header(props) {
                 <li
                     className="cu-p"
                     onClick={() => {
+
                         setOpenMenu(false);
+                        if (!user) {
+                            navigate("/login");
+                            return;
+                        }
                         props.openCart();
                     }}
                 >
