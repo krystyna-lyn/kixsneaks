@@ -4,27 +4,26 @@ import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Favorites from './components/pages/Favorites';
 import { useEffect, useState } from 'react';
-import {
-  collection,
-  getDocs,
-  addDoc,
-  deleteDoc,
-  doc
-} from "firebase/firestore";
-import { getDoc } from "firebase/firestore";
 
-import { db } from "./firebase";
-import { auth } from "./firebase";
+import { db, auth } from "./firebase";
 
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import AppContext from './context';
 import Orders from './components/pages/Orders';
-
-
+import {
+  collection,
+  getDocs,
+  getDoc,
+  addDoc,
+  deleteDoc,
+  doc,
+  query,
+  where
+} from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { query, where } from "firebase/firestore";
+
 
 
 function App() {
@@ -42,6 +41,8 @@ function App() {
   useEffect(() => {
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setUser(user);
+
 
       try {
 
@@ -59,6 +60,15 @@ function App() {
         );
 
         if (user) {
+
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+
+          if (userSnap.exists()) {
+            setUserProfile(userSnap.data());
+          }
+
+          //  favorite and cart
 
           const favoriteSnapshot = await getDocs(
             query(
@@ -90,6 +100,7 @@ function App() {
 
         } else {
 
+          setUserProfile(null);
           setFavorite([]);
           setCartItems([]);
 
@@ -111,32 +122,6 @@ function App() {
 
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-
-      if (currentUser) {
-
-        setUser(currentUser);
-
-        const userRef = doc(db, "users", currentUser.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (userSnap.exists()) {
-          setUserProfile(userSnap.data());
-        }
-
-      } else {
-
-        setUser(null);
-        setUserProfile(null);
-
-      }
-
-    });
-
-    return () => unsubscribe();
-
-  }, []);
 
   const addToCart = async (obj) => {
     try {
@@ -153,24 +138,23 @@ function App() {
         );
 
       } else {
-
-        const docRef = await addDoc(collection(db, "cart"), {
-          userId: auth.currentUser.uid,
+        const cartItem = {
+          userId: user.uid,
           productId: obj.id,
           title: obj.title,
           price: obj.price,
-          imgUrl: obj.imgUrl
-        });
+          imgUrl: obj.imgUrl,
+        };
 
+        const docRef = await addDoc(
+          collection(db, "cart"),
+          cartItem
+        );
         setCartItems(prev => [
           ...prev,
           {
             id: docRef.id,
-            userId: auth.currentUser.uid,
-            productId: obj.id,
-            title: obj.title,
-            price: obj.price,
-            imgUrl: obj.imgUrl
+            ...cartItem
           }
         ]);
 
@@ -200,23 +184,32 @@ function App() {
 
       } else {
 
-        const docRef = await addDoc(collection(db, "favorite"), {
+        const favoriteItem = {
+          userId: auth.currentUser.uid,
+          userId: user.uid,
           productId: obj.id,
           title: obj.title,
           price: obj.price,
           imgUrl: obj.imgUrl
-        });
+        };
+
+        const docRef = await addDoc(
+          collection(db, "favorite"),
+          favoriteItem
+        );
 
         setFavorite(prev => [
           ...prev,
           {
             id: docRef.id,
+            userId: auth.currentUser.uid,
             productId: obj.id,
             title: obj.title,
             price: obj.price,
             imgUrl: obj.imgUrl
           }
         ]);
+
 
       }
 
@@ -243,11 +236,8 @@ function App() {
       console.error(error);
     }
   };
-  const isItemAdded = (id) => {
-    return cartItems.some(
-      item => String(item.productId) === String(id)
-    );
-  };
+  const isItemAdded = (id) =>
+    cartItems.some(item => item.productId === id);
 
   console.log(cartItems);
 
