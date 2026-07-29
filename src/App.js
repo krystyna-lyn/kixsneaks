@@ -15,7 +15,6 @@ import Orders from './components/pages/Orders';
 import {
   collection,
   getDocs,
-  getDoc,
   addDoc,
   deleteDoc,
   doc,
@@ -23,7 +22,7 @@ import {
   where
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-
+import { getUserProfile } from "./services/userService";
 
 
 function App() {
@@ -61,12 +60,8 @@ function App() {
 
         if (user) {
 
-          const userRef = doc(db, "users", user.uid);
-          const userSnap = await getDoc(userRef);
-
-          if (userSnap.exists()) {
-            setUserProfile(userSnap.data());
-          }
+          const profile = await getUserProfile(user.uid);
+          setUserProfile(profile);
 
           //  favorite and cart
 
