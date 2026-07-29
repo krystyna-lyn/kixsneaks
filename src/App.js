@@ -124,6 +124,8 @@ function App() {
 
 
   const addToCart = async (obj) => {
+    if (!user) return;
+
     try {
       const findItem = cartItems.find(
         item => String(item.productId) === String(obj.id)
@@ -168,6 +170,8 @@ function App() {
 
   const onAddToFavorite = async (obj) => {
 
+    if (!user) return;
+
     try {
 
       const findItem = favorite.find(
@@ -185,7 +189,6 @@ function App() {
       } else {
 
         const favoriteItem = {
-          userId: auth.currentUser.uid,
           userId: user.uid,
           productId: obj.id,
           title: obj.title,
@@ -202,11 +205,7 @@ function App() {
           ...prev,
           {
             id: docRef.id,
-            userId: auth.currentUser.uid,
-            productId: obj.id,
-            title: obj.title,
-            price: obj.price,
-            imgUrl: obj.imgUrl
+            ...favoriteItem
           }
         ]);
 
@@ -237,27 +236,31 @@ function App() {
     }
   };
   const isItemAdded = (id) =>
-    cartItems.some(item => item.productId === id);
+    cartItems.some(
+      item => String(item.productId) === String(id)
+    );
 
   console.log(cartItems);
 
   return (
-    <AppContext.Provider value={{
-      items,
-      cartItems,
-      favorite,
+    <AppContext.Provider
+      value={{
+        items,
+        cartItems,
+        favorite,
 
-      user,
-      userProfile,
-      setUser,
-      setUserProfile,
+        user,
+        userProfile,
 
-      isItemAdded,
-      onAddToFavorite,
+        addToCart,
+        onAddToFavorite,
 
-      setCartOpened,
-      setCartItems
-    }}>
+        isItemAdded,
+
+        setCartOpened,
+        setCartItems
+      }}
+    >
 
       <div className="wrapper clear">
         {cartOpened &&
@@ -306,8 +309,6 @@ function App() {
           />
 
         </Routes>
-
-
 
       </div>
     </AppContext.Provider >
