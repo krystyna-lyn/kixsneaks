@@ -23,6 +23,11 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { getUserProfile } from "./services/userService";
+import {
+  getFavorites,
+  addFavorite,
+  removeFavorite
+} from "./services/favoriteService";
 
 
 function App() {
@@ -64,13 +69,8 @@ function App() {
           setUserProfile(profile);
 
           //  favorite and cart
-
-          const favoriteSnapshot = await getDocs(
-            query(
-              collection(db, "favorite"),
-              where("userId", "==", user.uid)
-            )
-          );
+          const favorites = await getFavorites(user.uid);
+          setFavorite(favorites);
 
           const cartSnapshot = await getDocs(
             query(
@@ -79,12 +79,6 @@ function App() {
             )
           );
 
-          setFavorite(
-            favoriteSnapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data()
-            }))
-          );
 
           setCartItems(
             cartSnapshot.docs.map(doc => ({
@@ -175,7 +169,7 @@ function App() {
 
       if (findItem) {
 
-        await deleteDoc(doc(db, "favorite", findItem.id));
+        await removeFavorite(findItem.id);
 
         setFavorite(prev =>
           prev.filter(item => item.id !== findItem.id)
@@ -191,20 +185,15 @@ function App() {
           imgUrl: obj.imgUrl
         };
 
-        const docRef = await addDoc(
-          collection(db, "favorite"),
-          favoriteItem
-        );
+        const id = await addFavorite(favoriteItem);
 
         setFavorite(prev => [
           ...prev,
           {
-            id: docRef.id,
+            id,
             ...favoriteItem
           }
         ]);
-
-
       }
 
     } catch (error) {
