@@ -2,9 +2,11 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../Card";
 import AppContext from "../../context";
+import { useAuth } from "../../hooks/useAuth";
 
 function Favorites({ addToCart }) {
-    const { favorite, onAddToFavorite, user } = useContext(AppContext);
+    const { favorite, onAddToFavorite } = useContext(AppContext);
+    const { user } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {

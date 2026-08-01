@@ -1,18 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import AppContext from "../context";
 import { useCart } from "../hooks/useCart";
-import { useState, useContext, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useAuth } from "../hooks/useAuth";
 
 function Header(props) {
 
-    const { user } = useContext(AppContext);
+
+    const { user, userProfile } = useAuth();
     const navigate = useNavigate();
 
     const { totalPrice } = useCart();
-
-    const { userProfile } = useContext(AppContext);
 
     const [openMenu, setOpenMenu] = useState(false);
     const menuRef = useRef(null);
