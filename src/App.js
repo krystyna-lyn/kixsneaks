@@ -12,23 +12,11 @@ import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import AppContext from './context';
 import Orders from './components/pages/Orders';
-import {
-  collection,
-  getDocs,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
-import {
-  getFavorites,
-  addFavorite,
-  removeFavorite
-} from "./services/favoriteService";
-import {
-  getCart,
-  addCartItem,
-  removeCartItem
-} from "./services/cartService";
+import { deleteDoc, doc } from "firebase/firestore";
+import { getFavorites, addFavorite, removeFavorite } from "./services/favoriteService";
+import { getCart, addCartItem, removeCartItem } from "./services/cartService";
 import { useAuth } from "./hooks/useAuth";
+import { getProducts } from "./services/productService";
 
 
 function App() {
@@ -50,16 +38,8 @@ function App() {
 
         setIsLoading(true);
 
-        const itemsSnapshot = await getDocs(
-          collection(db, "items")
-        );
-
-        setItems(
-          itemsSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }))
-        );
+        const products = await getProducts();
+        setItems(products);
 
         if (user) {
 
