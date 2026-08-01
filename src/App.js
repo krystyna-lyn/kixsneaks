@@ -15,11 +15,8 @@ import Orders from './components/pages/Orders';
 import {
   collection,
   getDocs,
-  addDoc,
   deleteDoc,
   doc,
-  query,
-  where
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { getUserProfile } from "./services/userService";
@@ -28,6 +25,11 @@ import {
   addFavorite,
   removeFavorite
 } from "./services/favoriteService";
+import {
+  getCart,
+  addCartItem,
+  removeCartItem
+} from "./services/cartService";
 
 
 function App() {
@@ -72,20 +74,8 @@ function App() {
           const favorites = await getFavorites(user.uid);
           setFavorite(favorites);
 
-          const cartSnapshot = await getDocs(
-            query(
-              collection(db, "cart"),
-              where("userId", "==", user.uid)
-            )
-          );
-
-
-          setCartItems(
-            cartSnapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data()
-            }))
-          );
+          const cart = await getCart(user.uid);
+          setCartItems(cart);
 
         } else {
 
@@ -137,14 +127,12 @@ function App() {
           imgUrl: obj.imgUrl,
         };
 
-        const docRef = await addDoc(
-          collection(db, "cart"),
-          cartItem
-        );
+        const id = await addCartItem(cartItem);
+
         setCartItems(prev => [
           ...prev,
           {
-            id: docRef.id,
+            id,
             ...cartItem
           }
         ]);
@@ -209,7 +197,7 @@ function App() {
 
   const deleteItem = async (id) => {
     try {
-      await deleteDoc(doc(db, "cart", id));
+      await removeCartItem(id);
 
       setCartItems(prev =>
         prev.filter(item => item.id !== id)
