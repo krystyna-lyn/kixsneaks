@@ -1,14 +1,9 @@
 import { useContext, useState } from "react";
 import Info from "../Info";
 import AppContext from "../../context";
-import { db } from "../../firebase";
 import { useCart } from "../../hooks/useCart";
-import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc
-} from "firebase/firestore";
+import { createOrder, clearCart } from "../../services/orderService";
+import { useAuth } from "../../hooks/useAuth";
 
 import styles from '../Drawer/Drawer.module.scss'
 
@@ -19,6 +14,7 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
     const [orderId, setOrderId] = useState(null);
     const { cartItems, setCartItems } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
+    const { user } = useAuth();
 
     const { totalPrice } = useCart()
 
@@ -30,25 +26,17 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
 
             // create order
 
-            const orderItems = cartItems.map(item => ({
-                productId: item.productId,
-                title: item.title,
-                price: item.price,
-                imgUrl: item.imgUrl,
-            }));
 
-            const orderRef = await addDoc(collection(db, "orders"), {
-                createdAt: new Date(),
-                items: orderItems,
+            const orderId = await createOrder({
+                userId: user.uid,
+                items: cartItems
             });
 
-            setOrderId(orderRef.id);
+            setOrderId(orderId);
 
 
             // delete items from cart
-            for (const item of cartItems) {
-                await deleteDoc(doc(db, "cart", item.id));
-            }
+            await clearCart(cartItems);
 
             // refresh React
             setCartItems([]);
