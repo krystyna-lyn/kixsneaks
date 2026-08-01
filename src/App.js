@@ -5,7 +5,7 @@ import Drawer from './components/Drawer';
 import Favorites from './components/pages/Favorites';
 import { useEffect, useState } from 'react';
 
-import { db, auth } from "./firebase";
+import { db } from "./firebase";
 
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
@@ -18,8 +18,6 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
-import { getUserProfile } from "./services/userService";
 import {
   getFavorites,
   addFavorite,
@@ -30,6 +28,7 @@ import {
   addCartItem,
   removeCartItem
 } from "./services/cartService";
+import { useAuth } from "./hooks/useAuth";
 
 
 function App() {
@@ -41,14 +40,11 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  const [user, setUser] = useState(null);
-  const [userProfile, setUserProfile] = useState(null);
+  const { user, loading } = useAuth();
 
   useEffect(() => {
 
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setUser(user);
-
+    async function loadData() {
 
       try {
 
@@ -67,10 +63,6 @@ function App() {
 
         if (user) {
 
-          const profile = await getUserProfile(user.uid);
-          setUserProfile(profile);
-
-          //  favorite and cart
           const favorites = await getFavorites(user.uid);
           setFavorite(favorites);
 
@@ -79,7 +71,6 @@ function App() {
 
         } else {
 
-          setUserProfile(null);
           setFavorite([]);
           setCartItems([]);
 
@@ -95,11 +86,13 @@ function App() {
 
       }
 
-    });
+    }
 
-    return () => unsubscribe();
+    if (!loading) {
+      loadData();
+    }
 
-  }, []);
+  }, [user, loading]);
 
 
   const addToCart = async (obj) => {
@@ -220,15 +213,9 @@ function App() {
         items,
         cartItems,
         favorite,
-
-        user,
-        userProfile,
-
         addToCart,
         onAddToFavorite,
-
         isItemAdded,
-
         setCartOpened,
         setCartItems
       }}
