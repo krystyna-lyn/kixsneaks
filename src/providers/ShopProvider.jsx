@@ -1,5 +1,7 @@
 import { useState } from "react";
 import AppContext from "../context";
+import { useEffect, useState } from "react";
+import { getProducts } from "../services/productService";
 
 function ShopProvider({ children }) {
 
@@ -7,6 +9,22 @@ function ShopProvider({ children }) {
     const [cartItems, setCartItems] = useState([]);
     const [favorite, setFavorite] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    // load products from productService
+    useEffect(() => {
+        const loadProducts = async () => {
+            try {
+                const data = await getProducts();
+                setItems(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadProducts();
+    }, []);
 
     return (
         <AppContext.Provider
