@@ -1,6 +1,5 @@
-import { useState } from "react";
-import AppContext from "../context/context";
 import { useEffect, useState } from "react";
+import ShopContext from "../context/ShopContext";
 import { getProducts } from "../services/productService";
 
 function ShopProvider({ children }) {
@@ -10,12 +9,11 @@ function ShopProvider({ children }) {
     const [favorite, setFavorite] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // load products from productService
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const data = await getProducts();
-                setItems(data);
+                const products = await getProducts();
+                setItems(products);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -27,7 +25,7 @@ function ShopProvider({ children }) {
     }, []);
 
     return (
-        <AppContext.Provider
+        <ShopContext.Provider
             value={{
                 items,
                 setItems,
@@ -43,7 +41,7 @@ function ShopProvider({ children }) {
             }}
         >
             {children}
-        </AppContext.Provider>
+        </ShopContext.Provider>
     );
 }
 

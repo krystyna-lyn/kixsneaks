@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import Card from "../Card";
-import AppContext from "../../context/context";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
+import AppContext from "../../context/context";
 
-function Orders({ }) {
+function Orders() {
     const { addToCart } = useContext(AppContext);
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

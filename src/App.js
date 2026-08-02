@@ -24,8 +24,9 @@ function App() {
   const [items, setItems] = useState([]);
   const [cartOpened, setCartOpened] = useState(false);
   const [favorite, setFavorite] = useState([]);
-  const [cartItems, setCartItems] = useState([])
+
   const [searchValue, setSearchValue] = useState('');
+  const [cartItems, setCartItems] = useState([])
   const [isLoading, setIsLoading] = useState(true);
 
   const { user, loading } = useAuth();
