@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AppContext from "../context";
+import AppContext from "../context/context";
 import { useEffect, useState } from "react";
 import { getProducts } from "../services/productService";
 

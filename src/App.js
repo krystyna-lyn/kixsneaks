@@ -10,7 +10,7 @@ import { db } from "./firebase";
 import Home from './components/pages/Home';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
-import AppContext from './context';
+import AppContext from './context/context';
 import Orders from './components/pages/Orders';
 import { deleteDoc, doc } from "firebase/firestore";
 import { getFavorites, addFavorite, removeFavorite } from "./services/favoriteService";

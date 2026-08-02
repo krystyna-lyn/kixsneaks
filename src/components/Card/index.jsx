@@ -2,7 +2,7 @@ import { useContext } from "react";
 import styles from "../Card/Card.module.scss";
 import Loader from "../Loader";
 import { useNavigate } from "react-router-dom";
-import AppContext from "../../context";
+import AppContext from "../../context/context";
 
 function Card({
     id,

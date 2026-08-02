@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import Info from "../Info";
-import AppContext from "../../context";
+import AppContext from "../../context/context";
 import { useCart } from "../../hooks/useCart";
 import { createOrder, clearCart } from "../../services/orderService";
 import { useAuth } from "../../hooks/useAuth";
