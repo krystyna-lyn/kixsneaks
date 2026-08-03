@@ -17,6 +17,7 @@ import { getFavorites, addFavorite, removeFavorite } from "./services/favoriteSe
 import { getCart, addCartItem, removeCartItem } from "./services/cartService";
 import { useAuth } from "./hooks/useAuth";
 import { getProducts } from "./services/productService";
+import ProtectedRoute from "./components/routes/ProtectedRoute";
 
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   const { user, loading } = useAuth();
+
+  console.log("App user:", user);
 
   useEffect(() => {
 
@@ -194,6 +197,8 @@ function App() {
         items,
         cartItems,
         favorite,
+        user,
+        loading,
         addToCart,
         onAddToFavorite,
         isItemAdded,
@@ -229,10 +234,12 @@ function App() {
             exact
           />
           <Route path="/favorites" element={
-            <Favorites
-              addToCart={addToCart}
-              favorited={true}
-            />
+            <ProtectedRoute>
+              <Favorites
+                addToCart={addToCart}
+                favorited={true}
+              />
+            </ProtectedRoute>
           }
           />
           <Route path="/login" element={
@@ -244,7 +251,9 @@ function App() {
           }
           />
           <Route path="/orders" element={
-            <Orders />
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
           }
           />
 
