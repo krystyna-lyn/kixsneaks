@@ -1,15 +1,20 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import AuthForm from "../AuthForm/AuthForm";
 import Input from "../Input/Input";
+
 function Login() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate();
+
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || "/";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +29,7 @@ function Login() {
 
             alert("Login successful!");
 
-            navigate("/");
+            navigate(from, { replace: true });
 
         } catch (error) {
 

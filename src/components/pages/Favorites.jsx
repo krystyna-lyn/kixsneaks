@@ -1,23 +1,10 @@
-import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import Card from "../Card";
 import AppContext from "../../context/context";
-import { useAuth } from "../../hooks/useAuth";
 
 function Favorites({ addToCart }) {
     const { favorite, onAddToFavorite } = useContext(AppContext);
-    const { user } = useAuth();
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!user) {
-            navigate("/login", { replace: true });
-        }
-    }, [user, navigate]);
-
-    if (!user) {
-        return null;
-    }
 
     return (
         <div className="content p-40">
