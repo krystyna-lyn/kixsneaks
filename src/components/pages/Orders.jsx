@@ -1,28 +1,23 @@
 import { useContext, useEffect, useState } from "react";
 import Card from "../Card";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { getOrders } from "../../services/orderService";
+import { useAuth } from "../../hooks/useAuth";
 import AppContext from "../../context/context";
 
 function Orders() {
+
     const { addToCart } = useContext(AppContext);
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const { user } = useAuth();
+
     useEffect(() => {
-
+        if (!user) return;
         async function fetchOrders() {
-
             try {
 
-                const snapshot = await getDocs(
-                    collection(db, "orders")
-                );
-
-                const data = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+                const data = await getOrders(user.uid);
 
                 setOrders(
                     data.flatMap(order => order.items)
@@ -43,7 +38,7 @@ function Orders() {
 
         fetchOrders();
 
-    }, []);
+    }, [user]);
 
     return (
 
@@ -51,20 +46,24 @@ function Orders() {
             <div className='d-flex align-center mb-40 justify-between'>
                 <h1 className="text-center">Orders</h1>
             </div>
-            <div className="sneakers d-flex justify-between flex-wrap">
+            {!isLoading && orders.length === 0 ? (
+                <h2>You don't have any orders yet.</h2>
+            ) :
+                (<div className="sneakers d-flex justify-between flex-wrap">
 
-                {orders.map((item, index) => {
-                    return (
-                        <Card
-                            key={item.productId}
-                            {...item}
-                            onPlus={addToCart}
-                            loading={isLoading}
-                        />
-                    )
-                })
-                }
-            </div>
+                    {orders.map((item) => {
+                        return (
+                            <Card
+                                key={item.productId}
+                                {...item}
+                                onPlus={addToCart}
+                                loading={isLoading}
+                            />
+                        )
+                    })
+                    }
+                </div>
+                )}
         </div>
     );
 
