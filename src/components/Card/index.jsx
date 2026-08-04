@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import styles from "../Card/Card.module.scss";
 import Loader from "../Loader";
-import { useNavigate } from "react-router-dom";
 import AppContext from "../../context/context";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Card({
     id,
@@ -16,6 +16,7 @@ function Card({
 
     const { favorite, isItemAdded, user } = useContext(AppContext);
     const navigate = useNavigate();
+    const location = useLocation();
 
     // product from items collection
     const obj = {
@@ -34,16 +35,25 @@ function Card({
 
     const onClickPlus = () => {
         if (!user) {
-            navigate("/login");
+            navigate("/login", {
+                state: {
+                    from: location
+                }
+            });
             return;
         }
+
 
         onPlus(obj);
     }
 
     const onClickFavorite = () => {
         if (!user) {
-            navigate("/login");
+            navigate("/login", {
+                state: {
+                    from: location
+                }
+            });
             return;
         }
 
