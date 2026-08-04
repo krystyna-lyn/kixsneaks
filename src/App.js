@@ -1,5 +1,6 @@
 import 'macro-css';
 import { Routes, Route } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify";
 import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Favorites from './components/pages/Favorites';
@@ -32,7 +33,6 @@ function App() {
 
   const { user, loading } = useAuth();
 
-  console.log("App user:", user);
 
   useEffect(() => {
 
@@ -180,7 +180,7 @@ function App() {
         prev.filter(item => item.id !== id)
       );
     } catch (error) {
-      alert("Error deleting item from cart");
+      toast.error("Error deleting item from cart");
       console.error(error);
     }
   };
@@ -258,7 +258,11 @@ function App() {
           />
 
         </Routes>
-
+        <ToastContainer
+          position="bottom-right"
+          autoClose={2500}
+          hideProgressBar={false}
+        />
       </div>
     </AppContext.Provider >
   );

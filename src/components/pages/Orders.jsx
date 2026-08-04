@@ -3,6 +3,7 @@ import Card from "../Card";
 import { getOrders } from "../../services/orderService";
 import { useAuth } from "../../hooks/useAuth";
 import AppContext from "../../context/context";
+import { toast } from "react-toastify";
 
 function Orders() {
 
@@ -26,7 +27,7 @@ function Orders() {
             } catch (error) {
 
                 console.error(error);
-                alert("Error loading orders");
+                toast.error("Error loading orders");
 
             } finally {
 
@@ -64,6 +65,7 @@ function Orders() {
                     }
                 </div>
                 )}
+
         </div>
     );
 

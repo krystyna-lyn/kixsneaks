@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-
+import { toast } from "react-toastify";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import AuthForm from "../AuthForm/AuthForm";
@@ -27,7 +27,7 @@ function Login() {
                 password
             );
 
-            alert("Login successful!");
+            toast.success("Login successful!");
 
             navigate(from, { replace: true });
 
@@ -38,19 +38,19 @@ function Login() {
             switch (error.code) {
 
                 case "auth/invalid-credential":
-                    alert("Wrong email or password.");
+                    toast.error("Wrong email or password.");
                     break;
 
                 case "auth/user-not-found":
-                    alert("User not found.");
+                    toast.error("User not found.");
                     break;
 
                 case "auth/wrong-password":
-                    alert("Wrong password.");
+                    toast.error("Wrong password.");
                     break;
 
                 default:
-                    alert(error.message);
+                    toast.error(error.message);
             }
         }
     };

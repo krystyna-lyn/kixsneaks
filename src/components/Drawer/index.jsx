@@ -6,6 +6,8 @@ import { createOrder, clearCart } from "../../services/orderService";
 import { useAuth } from "../../hooks/useAuth";
 
 import styles from '../Drawer/Drawer.module.scss'
+import { toast } from "react-toastify";
+
 
 
 function Drawer({ onClose, onRemove, items = [], opened }) {
@@ -46,7 +48,7 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
         } catch (error) {
 
             console.error(error);
-            alert("Something went wrong");
+            toast.error("Something went wrong");
 
         } finally {
 
@@ -98,6 +100,7 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
                                 <img src='/img/arrow.svg' alt='Arrow' />
                             </button>
                         </div>
+
                     </div>
 
                 ) : (

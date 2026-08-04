@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { db, auth } from "../../firebase";
 import {
@@ -45,7 +45,7 @@ function Register() {
                     createdAt: serverTimestamp()
                 }
             );
-            alert("Registration successful!");
+            toast.success("Registration successful!");
 
             navigate("/login");
 
@@ -53,7 +53,7 @@ function Register() {
 
             console.error(error);
 
-            alert(error.message);
+            toast.error(error.message);
 
         }
 
@@ -78,14 +78,14 @@ function Register() {
                 type="email"
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
             />
 
             <Input
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
             />
 
         </AuthForm>
