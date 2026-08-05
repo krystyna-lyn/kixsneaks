@@ -1,15 +1,15 @@
+import { useState } from "react";
 import Card from "../Card";
 
 
 function Home({
     items,
-    searchItem,
     addToCart,
-    setSearchValue,
-    searchValue,
     onAddToFavorite,
     isLoading
 }) {
+
+    const [searchValue, setSearchValue] = useState('')
 
     const renderItems = () => {
         const filteredItems = items.filter((item) =>
@@ -22,6 +22,7 @@ function Home({
                 addFavorite={onAddToFavorite}
                 onPlus={addToCart}
                 loading={isLoading}
+
             />
         ));
     }
@@ -39,7 +40,10 @@ function Home({
                             alt="remove" />
                     )}
 
-                    <input onChange={searchItem} value={searchValue} type="text" placeholder="Search..." />
+                    <input onChange={(e) => setSearchValue(e.target.value)}
+                        value={searchValue}
+                        type="text"
+                        placeholder="Search..." />
                 </div>
             </div>
 
