@@ -7,16 +7,18 @@ import { useAuth } from "../../hooks/useAuth";
 
 import styles from '../Drawer/Drawer.module.scss'
 import { toast } from "react-toastify";
+import { useShop } from "../../hooks/useShop";
 
 
 
-function Drawer({ onClose, onRemove, items = [], opened }) {
+function Drawer({ onClose, items = [], opened }) {
 
     const [isOrderComplete, setIsOrderComplete] = useState(false);
     const [orderId, setOrderId] = useState(null);
     const { cartItems, setCartItems } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuth();
+    const { deleteItem } = useShop();
 
     const { totalPrice } = useCart()
 
@@ -35,7 +37,6 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
             });
 
             setOrderId(orderId);
-
 
             // delete items from cart
             await clearCart(cartItems);
@@ -78,7 +79,7 @@ function Drawer({ onClose, onRemove, items = [], opened }) {
                                         <p className='mb-5'>{obj.title}</p>
                                         <b>{obj.price}€</b>
                                     </div>
-                                    <img className='removeBtn' onClick={() => onRemove(obj.id)} src="./img/btn-remove.svg" alt="remove" />
+                                    <img className='removeBtn' onClick={() => deleteItem(obj.id)} src="./img/btn-remove.svg" alt="remove" />
                                 </div>
                             ))}
                         </div>
