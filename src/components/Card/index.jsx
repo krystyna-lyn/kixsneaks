@@ -1,8 +1,7 @@
-import { useContext } from "react";
 import styles from "../Card/Card.module.scss";
 import Loader from "../Loader";
-import AppContext from "../../context/context";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useShop } from "../../hooks/useShop";
 
 function Card({
     id,
@@ -14,7 +13,7 @@ function Card({
     loading = false,
 }) {
 
-    const { favorite, isItemAdded, user } = useContext(AppContext);
+    const { favorite, isItemAdded, user } = useShop()
     const navigate = useNavigate();
     const location = useLocation();
 

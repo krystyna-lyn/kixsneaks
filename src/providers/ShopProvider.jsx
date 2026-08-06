@@ -161,6 +161,8 @@ function ShopProvider({ children }) {
     return (
         <ShopContext.Provider
             value={{
+                user,
+                loading,
                 items,
                 setItems,
                 cartItems,

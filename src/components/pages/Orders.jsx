@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../Card";
 import { getOrders } from "../../services/orderService";
 import { useAuth } from "../../hooks/useAuth";
-import AppContext from "../../context/context";
 import { toast } from "react-toastify";
+import { useShop } from "../../hooks/useShop";
 
 function Orders() {
 
-    const { addToCart } = useContext(AppContext);
+    const { addToCart } = useShop();
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 

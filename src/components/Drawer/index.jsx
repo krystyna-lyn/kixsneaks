@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Info from "../Info";
-import AppContext from "../../context/context";
 import { useCart } from "../../hooks/useCart";
 import { createOrder, clearCart } from "../../services/orderService";
 import { useAuth } from "../../hooks/useAuth";
@@ -15,7 +14,7 @@ function Drawer({ onClose, items = [], opened }) {
 
     const [isOrderComplete, setIsOrderComplete] = useState(false);
     const [orderId, setOrderId] = useState(null);
-    const { cartItems, setCartItems } = useContext(AppContext);
+    const { cartItems, setCartItems } = useShop();
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuth();
     const { deleteItem } = useShop();
@@ -108,7 +107,10 @@ function Drawer({ onClose, items = [], opened }) {
                     <Info
                         title={isOrderComplete ? "Order is completed" : "Empty cart"}
                         image={isOrderComplete ? "./img/complete-order.jpg" : "./img/empty-cart.jpg"}
-                        description={isOrderComplete ? `ordered product #${orderId}` : "add some products"} />
+                        description={isOrderComplete ? `ordered product #${orderId}` : "add some products"}
+                        onClose={onClose}
+                    />
+
                 )}
 
 

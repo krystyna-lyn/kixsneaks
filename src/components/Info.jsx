@@ -1,16 +1,13 @@
-import React, { useContext } from 'react'
-import AppContext from '../context/context';
+import React from 'react';
 
-const Info = ({ title, image, description }) => {
-
-    const { setCartOpened } = useContext(AppContext);
+const Info = ({ onClose, title, image, description }) => {
 
     return (
         <div className="cartEmpty d-flex align-center justify-center flex-column flex">
             <img className='mb-20' src={image} alt="empty-cart" />
             <h2>{title}</h2>
             <p className='opacity-6'>{description}</p>
-            <button className="greenButton" onClick={() => setCartOpened(false)}>
+            <button className="greenButton" onClick={onClose}>
                 <img src="./img/arrow.svg" alt="arrow" />
                 go back
             </button>

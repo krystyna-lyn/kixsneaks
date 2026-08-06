@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import Card from "../Card";
-import AppContext from "../../context/context";
+import { useShop } from "../../hooks/useShop";
 
 function Favorites({ addToCart }) {
-    const { favorite, onAddToFavorite } = useContext(AppContext);
+    const { favorite, onAddToFavorite } = useShop();
 
 
     return (
