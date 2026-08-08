@@ -28,13 +28,11 @@ function App() {
   } = useShop();
 
 
-
   return (
 
     <div className="wrapper clear">
       {cartOpened &&
         <Drawer
-          items={cartItems}
           onClose={() => setCartOpened(false)}
           opened={cartOpened}
         />}

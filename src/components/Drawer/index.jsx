@@ -10,16 +10,20 @@ import { useShop } from "../../hooks/useShop";
 
 
 
-function Drawer({ onClose, items = [], opened }) {
+function Drawer({ onClose, opened }) {
 
     const [isOrderComplete, setIsOrderComplete] = useState(false);
     const [orderId, setOrderId] = useState(null);
-    const { cartItems, setCartItems } = useShop();
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuth();
-    const { deleteItem } = useShop();
-
     const { totalPrice } = useCart()
+    const {
+        cartItems,
+        setCartItems,
+        deleteItem,
+        increaseQuantity,
+        decreaseQuantity
+    } = useShop();
 
 
     const onCheckout = async () => {
@@ -57,17 +61,21 @@ function Drawer({ onClose, items = [], opened }) {
         }
     };
     return (
-        <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
-            <div className={styles.drawer}>
+        <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}
+            onClick={onClose}>
+            <div
+                className={styles.drawer}
+                onClick={(e) => e.stopPropagation()}
+            >
                 <h2 className='d-flex justify-between mb-30'>Cart
                     <img onClick={onClose} className='removeBtn cu-p' src="./img/btn-remove.svg" alt="remove" />
                 </h2>
 
 
-                {items.length > 0 ? (
+                {cartItems.length > 0 ? (
                     <div className="d-flex flex-column flex">
-                        <div className="items flex">
-                            {items.map((obj) => (
+                        <div className={styles.items}>
+                            {cartItems.map((obj) => (
                                 <div key={obj.id} className='cartItem d-flex align-center mb-20' >
                                     <div
                                         style={{ backgroundImage: `url(${obj.imgUrl})` }}
@@ -76,7 +84,28 @@ function Drawer({ onClose, items = [], opened }) {
 
                                     <div className='mr-20 flex'>
                                         <p className='mb-5'>{obj.title}</p>
+
                                         <b>{obj.price}€</b>
+
+                                        <div className={styles.quantityControl}>
+                                            <button
+                                                onClick={() => decreaseQuantity(obj.id)}
+                                                className={styles.quantityButton}
+                                            >
+                                                −
+                                            </button>
+
+                                            <span className={styles.quantity}>
+                                                {obj.quantity || 1}
+                                            </span>
+
+                                            <button
+                                                onClick={() => increaseQuantity(obj.id)}
+                                                className={styles.quantityButton}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
                                     </div>
                                     <img className='removeBtn' onClick={() => deleteItem(obj.id)} src="./img/btn-remove.svg" alt="remove" />
                                 </div>

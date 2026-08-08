@@ -6,7 +6,8 @@ import {
     doc,
     getDocs,
     query,
-    where
+    where,
+    updateDoc
 } from "firebase/firestore";
 
 export const getCart = async (userId) => {
@@ -30,6 +31,13 @@ export const addCartItem = async (cartItem) => {
     );
 
     return docRef.id;
+};
+
+export const updateCartQuantity = async (id, quantity) => {
+    await updateDoc(
+        doc(db, "cart", id),
+        { quantity }
+    );
 };
 
 export const removeCartItem = async (id) => {

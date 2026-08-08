@@ -3,13 +3,14 @@ import ShopContext from "../context/ShopContext";
 import { getProducts } from "../services/productService";
 import { useAuth } from "../hooks/useAuth";
 import { getFavorites } from "../services/favoriteService";
-import { getCart } from "../services/cartService";
-import { db } from "../firebase";
-import { addCartItem } from "../services/cartService";
-import { deleteDoc, doc } from "firebase/firestore";
 import { addFavorite, removeFavorite } from "../services/favoriteService";
-import { removeCartItem } from "../services/cartService";
 import { toast } from "react-toastify";
+import {
+    getCart,
+    addCartItem,
+    removeCartItem,
+    updateCartQuantity
+} from "../services/cartService";
 
 function ShopProvider({ children }) {
 
@@ -32,6 +33,7 @@ function ShopProvider({ children }) {
                     setFavorite(favorites);
 
                     const cart = await getCart(user.uid);
+                    console.log("CART FROM FIREBASE:", cart);
                     setCartItems(cart);
                 } else {
                     setFavorite([]);
@@ -53,6 +55,8 @@ function ShopProvider({ children }) {
 
 
     const addToCart = async (obj) => {
+        console.log("ADD TO CART:", obj);
+        console.log("CURRENT CART:", cartItems);
         if (!user) return;
 
         try {
@@ -61,20 +65,32 @@ function ShopProvider({ children }) {
             );
 
             if (findItem) {
+                const newQuantity = (findItem.quantity || 1) + 1;
+                console.log("NEW QUANTITY:", newQuantity);
 
-                await deleteDoc(doc(db, "cart", findItem.id));
+                await updateCartQuantity(
+
+                    findItem.id,
+                    newQuantity
+                );
 
                 setCartItems(prev =>
-                    prev.filter(item => item.id !== findItem.id)
+                    prev.map(item =>
+                        item.id === findItem.id
+                            ? { ...item, quantity: newQuantity }
+                            : item
+                    )
                 );
 
             } else {
+
                 const cartItem = {
                     userId: user.uid,
                     productId: obj.id,
                     title: obj.title,
                     price: obj.price,
                     imgUrl: obj.imgUrl,
+                    quantity: 1
                 };
 
                 const id = await addCartItem(cartItem);
@@ -86,13 +102,15 @@ function ShopProvider({ children }) {
                         ...cartItem
                     }
                 ]);
-
             }
 
         } catch (error) {
             console.error(error);
+            toast.error("Error updating cart");
         }
     };
+
+
 
     const onAddToFavorite = async (obj) => {
 
@@ -139,6 +157,68 @@ function ShopProvider({ children }) {
 
     };
 
+    const increaseQuantity = async (id) => {
+        try {
+            const item = cartItems.find(
+                item => item.id === id
+            );
+
+            if (!item) return;
+
+            const newQuantity = (item.quantity || 1) + 1;
+
+            await updateCartQuantity(id, newQuantity);
+
+            setCartItems(prev =>
+                prev.map(item =>
+                    item.id === id
+                        ? { ...item, quantity: newQuantity }
+                        : item
+                )
+            );
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Error increasing quantity");
+        }
+    };
+
+    const decreaseQuantity = async (id) => {
+        try {
+            const item = cartItems.find(
+                item => item.id === id
+            );
+
+            if (!item) return;
+
+            const newQuantity = (item.quantity || 1) - 1;
+
+            if (newQuantity <= 0) {
+                await removeCartItem(id);
+
+                setCartItems(prev =>
+                    prev.filter(item => item.id !== id)
+                );
+
+                return;
+            }
+
+            await updateCartQuantity(id, newQuantity);
+
+            setCartItems(prev =>
+                prev.map(item =>
+                    item.id === id
+                        ? { ...item, quantity: newQuantity }
+                        : item
+                )
+            );
+
+        } catch (error) {
+            console.error(error);
+            toast.error("Error decreasing quantity");
+        }
+    };
+
     const deleteItem = async (id) => {
         try {
             await removeCartItem(id);
@@ -172,6 +252,8 @@ function ShopProvider({ children }) {
                 isLoading,
                 setIsLoading,
                 addToCart,
+                increaseQuantity,
+                decreaseQuantity,
                 onAddToFavorite,
                 deleteItem,
                 isItemAdded
