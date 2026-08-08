@@ -30,7 +30,7 @@ function App() {
 
   return (
 
-    <div className="wrapper clear">
+    <div className="app">
       {cartOpened &&
         <Drawer
           onClose={() => setCartOpened(false)}
@@ -38,44 +38,45 @@ function App() {
         />}
 
       <Header openCart={() => setCartOpened(true)} />
-
-      <Routes>
-        <Route path="/" element={
-          <Home
-            items={items}
-            cartItems={cartItems}
-            addToCart={addToCart}
-            onAddToFavorite={onAddToFavorite}
-            isLoading={isLoading}
-          />
-        }
-          exact
-        />
-        <Route path="/favorites" element={
-          <ProtectedRoute>
-            <Favorites
+      <main className="container">
+        <Routes>
+          <Route path="/" element={
+            <Home
+              items={items}
+              cartItems={cartItems}
               addToCart={addToCart}
-              favorited={true}
+              onAddToFavorite={onAddToFavorite}
+              isLoading={isLoading}
             />
-          </ProtectedRoute>
-        }
-        />
-        <Route path="/login" element={
-          <Login />
-        }
-        />
-        <Route path="/register" element={
-          <Register />
-        }
-        />
-        <Route path="/orders" element={
-          <ProtectedRoute>
-            <Orders />
-          </ProtectedRoute>
-        }
-        />
+          }
+            exact
+          />
+          <Route path="/favorites" element={
+            <ProtectedRoute>
+              <Favorites
+                addToCart={addToCart}
+                favorited={true}
+              />
+            </ProtectedRoute>
+          }
+          />
+          <Route path="/login" element={
+            <Login />
+          }
+          />
+          <Route path="/register" element={
+            <Register />
+          }
+          />
+          <Route path="/orders" element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
+          }
+          />
 
-      </Routes>
+        </Routes>
+      </main>
       <ToastContainer
         position="bottom-right"
         autoClose={2500}

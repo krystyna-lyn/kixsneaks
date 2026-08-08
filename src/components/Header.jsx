@@ -7,10 +7,8 @@ import { useAuth } from "../hooks/useAuth";
 
 function Header(props) {
 
-
     const { user, userProfile } = useAuth();
     const navigate = useNavigate();
-
     const { totalPrice } = useCart();
 
     const [openMenu, setOpenMenu] = useState(false);
@@ -42,75 +40,116 @@ function Header(props) {
         };
     }, []);
 
+    const handleCartClick = () => {
+        setOpenMenu(false);
+
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+
+        props.openCart();
+    };
+
     return (
-        <header className="d-flex justify-between align-center p-40">
-            <div className='d-flex align-center'>
-                <img width={40} height={40} src="./img/logo.png" alt="logo" />
+        <header className="siteHeader">
+
+            {/* Logo */}
+            <Link to="/" className="logo">
+                <img
+                    src="./img/logo.png"
+                    width={48}
+                    height={48}
+                    alt="KixsSneaks logo"
+                />
+
+                <div className="logoText">
+                    <h3>KixsSneaks</h3>
+                    <p>Best sneakers ever</p>
+                </div>
+            </Link>
 
 
-                <Link to='/'>
-                    <div>
-                        <h3 className='text-uppercase'>KixsSneaks</h3>
-                        <p className='opacity-5'>Best sneakers ever</p>
-                    </div>
-                </Link>
-            </div>
+            {/* Actions */}
+            <nav className="headerActions">
 
-            <ul className="headerMenu">
-
-                <li
-                    className="cu-p"
-                    onClick={() => {
-
-                        setOpenMenu(false);
-                        if (!user) {
-                            navigate("/login");
-                            return;
-                        }
-                        props.openCart();
-                    }}
+                {/* Cart */}
+                <button
+                    className="headerAction cartAction"
+                    onClick={handleCartClick}
+                    aria-label="Open shopping cart"
                 >
-                    <img src="./img/cart.svg" alt="cart" />
-                    <span className="cartTotal">{totalPrice}€</span>
-                </li>
-                <Link to='/favorites'>
-                    <li className='cu-p'>
-                        <img src="./img/heart.svg" alt="favorites" />
-                    </li>
+                    <img
+                        src="./img/cart.svg"
+                        alt=""
+                    />
+
+                    <span className="cartTotal">
+                        {totalPrice}€
+                    </span>
+                </button>
+
+
+                {/* Favorites */}
+                <Link
+                    to="/favorites"
+                    className="headerAction"
+                    aria-label="Favorites"
+                >
+                    <img
+                        src="./img/heart.svg"
+                        alt=""
+                    />
                 </Link>
 
-                <li style={{ position: "relative" }}
-                    ref={menuRef}>
+
+                {/* User */}
+                <div
+                    className="userWrapper"
+                    ref={menuRef}
+                >
 
                     {!userProfile ? (
 
-                        <Link to="/login">
-                            <img src="./img/user.svg" alt="user" />
+                        <Link
+                            to="/login"
+                            className="headerAction"
+                            aria-label="Login"
+                        >
+                            <img
+                                src="./img/user.svg"
+                                alt=""
+                            />
                         </Link>
 
-                    ) : ( // User is logged in
+                    ) : (
 
                         <>
-
-                            <div
+                            <button
                                 className="userMenuButton"
-                                onClick={() => setOpenMenu(!openMenu)}
+                                onClick={() => setOpenMenu(prev => !prev)}
+                                aria-expanded={openMenu}
                             >
-                                <div className="avatar">
-                                    {userProfile.name.charAt(0).toUpperCase()}
-                                </div>
 
+                                <span className="avatar">
+                                    {userProfile.name
+                                        .charAt(0)
+                                        .toUpperCase()}
+                                </span>
 
                                 <span className="userName">
                                     {userProfile.name}
                                 </span>
 
                                 <span
-                                    className={`arrow ${openMenu ? "rotate" : ""}`}
+                                    className={`arrow ${openMenu ? "rotate" : ""
+                                        }`}
                                 >
                                     ▼
                                 </span>
-                            </div>
+
+                            </button>
+
 
                             {openMenu && (
 
@@ -130,8 +169,9 @@ function Header(props) {
                                         Favorites
                                     </Link>
 
-                                    <button onClick={handleLogout}>Logout</button>
-
+                                    <button onClick={handleLogout}>
+                                        Logout
+                                    </button>
 
                                 </div>
 
@@ -141,11 +181,12 @@ function Header(props) {
 
                     )}
 
-                </li>
+                </div>
 
-            </ul>
+            </nav>
+
         </header>
-    )
+    );
 }
 
 export default Header;

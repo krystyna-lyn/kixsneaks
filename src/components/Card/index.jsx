@@ -13,11 +13,11 @@ function Card({
     loading = false,
 }) {
 
-    const { favorite, isItemAdded, user } = useShop()
+    const { favorite, isItemAdded, user } = useShop();
+
     const navigate = useNavigate();
     const location = useLocation();
 
-    // product from items collection
     const obj = {
         id,
         title,
@@ -25,12 +25,9 @@ function Card({
         imgUrl,
     };
 
-    // check if product in favoriites
-
     const isFavorite = favorite.some(
-        item => item.productId === id
+        item => String(item.productId) === String(id)
     );
-
 
     const onClickPlus = () => {
         if (!user) {
@@ -39,12 +36,12 @@ function Card({
                     from: location
                 }
             });
+
             return;
         }
 
-
         onPlus(obj);
-    }
+    };
 
     const onClickFavorite = () => {
         if (!user) {
@@ -53,66 +50,82 @@ function Card({
                     from: location
                 }
             });
+
             return;
         }
 
         addFavorite(obj);
-    }
+    };
+
+    const itemAdded = isItemAdded(id);
 
     return (
         <>
             {loading ? (
                 <Loader />
             ) : (
-                <div className={styles.card}>
+                <article className={styles.card}>
 
                     {addFavorite && (
-                        <div
-                            className={styles.favorite}
+                        <button
+                            className={`${styles.favorite} ${isFavorite ? styles.favoriteActive : ""
+                                }`}
                             onClick={onClickFavorite}
+                            aria-label={
+                                isFavorite
+                                    ? "Remove from favorites"
+                                    : "Add to favorites"
+                            }
                         >
-                            <img
-                                src={
-                                    isFavorite
-                                        ? "./img/liked.svg"
-                                        : "./img/unliked.svg"
-                                }
-                                alt="heart"
-                            />
-                        </div>
+                            <span>
+                                {isFavorite ? "♥" : "♡"}
+                            </span>
+                        </button>
                     )}
 
-                    <img
-                        width="100%"
-                        height={135}
-                        src={imgUrl}
-                        alt="item"
-                    />
+                    <div className={styles.imageWrapper}>
+                        <img
+                            className={styles.productImage}
+                            src={imgUrl}
+                            alt={title}
+                        />
+                    </div>
 
-                    <h5>{title}</h5>
+                    <div className={styles.info}>
 
-                    <div className="d-flex justify-between align-center">
+                        <h3 className={styles.title}>
+                            {title}
+                        </h3>
 
-                        <div className="d-flex flex-column">
-                            <span>price:</span>
-                            <b>{price} €</b>
+                        <div className={styles.bottom}>
+
+                            <div className={styles.priceBlock}>
+                                <span>Price</span>
+                                <strong>{price} €</strong>
+                            </div>
+
+                            {onPlus && (
+                                <button
+                                    className={`${styles.addButton} ${itemAdded ? styles.added : ""
+                                        }`}
+                                    onClick={onClickPlus}
+                                    aria-label={
+                                        itemAdded
+                                            ? "Remove from cart"
+                                            : "Add to cart"
+                                    }
+                                >
+                                    <span>
+                                        {itemAdded ? "✓" : "+"}
+                                    </span>
+                                </button>
+                            )}
+
                         </div>
 
-                        {onPlus && (
-                            <img
-                                className={styles.plus}
-                                onClick={onClickPlus}
-                                src={
-                                    isItemAdded(id)
-                                        ? "./img/btn-checked.svg"
-                                        : "./img/btn-plus.svg"
-                                }
-                                alt="plus"
-                            />
-                        )}
-
                     </div>
-                </div>
+
+                </article>
             )}
         </>
     );

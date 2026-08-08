@@ -47,7 +47,7 @@ function Home({
                 </div>
             </div>
 
-            <div className="sneakers d-flex justify-between flex-wrap">
+            <div className="sneakers">
                 {renderItems()}
             </div>
 
