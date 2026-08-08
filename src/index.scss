@@ -42,12 +42,13 @@ img {
 
 .app {
     min-height: 100vh;
+    padding-top: 80px;
 }
 
 .sneakers {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 24px;
+    gap: 20px;
     width: 100%;
 }
 
@@ -65,6 +66,10 @@ img {
 }
 
 @media (max-width: 480px) {
+    .app {
+        padding-top: 20px;
+    }
+
     .sneakers {
         grid-template-columns: 1fr;
     }

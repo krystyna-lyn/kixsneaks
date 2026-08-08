@@ -1,12 +1,12 @@
 import 'macro-css';
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
-import Header from './components/Header';
+import Header from './components/pages/Header/Header';
 import Drawer from './components/Drawer';
 import Favorites from './components/pages/Favorites';
 import { useState } from 'react';
 
-import Home from './components/pages/Home';
+import Home from './components/pages/Home/Home';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 
