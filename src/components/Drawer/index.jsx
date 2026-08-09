@@ -61,35 +61,59 @@ function Drawer({ onClose, opened }) {
         }
     };
     return (
-        <div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}
-            onClick={onClose}>
+        <div
+            className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}
+            onClick={onClose}
+        >
             <div
                 className={styles.drawer}
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2 className='d-flex justify-between mb-30'>Cart
-                    <img onClick={onClose} className='removeBtn cu-p' src="./img/btn-remove.svg" alt="remove" />
-                </h2>
+                <div className={styles.header}>
+                    <div>
+                        <span className={styles.eyebrow}>YOUR BAG</span>
+                        <h2>Shopping cart</h2>
+                    </div>
 
+                    <button
+                        className={styles.closeButton}
+                        onClick={onClose}
+                        aria-label="Close cart"
+                    >
+                        ×
+                    </button>
+                </div>
 
                 {cartItems.length > 0 ? (
-                    <div className="d-flex flex-column flex">
+                    <div className={styles.cartContent}>
+
                         <div className={styles.items}>
                             {cartItems.map((obj) => (
-                                <div key={obj.id} className='cartItem d-flex align-center mb-20' >
+                                <div
+                                    key={obj.id}
+                                    className={styles.cartItem}
+                                >
                                     <div
-                                        style={{ backgroundImage: `url(${obj.imgUrl})` }}
-                                        className='cartItemImg'>
-                                    </div>
+                                        style={{
+                                            backgroundImage: `url(${obj.imgUrl})`
+                                        }}
+                                        className={styles.cartItemImg}
+                                    />
 
-                                    <div className='mr-20 flex'>
-                                        <p className='mb-5'>{obj.title}</p>
+                                    <div className={styles.itemInfo}>
+                                        <p className={styles.itemTitle}>
+                                            {obj.title}
+                                        </p>
 
-                                        <b>{obj.price}€</b>
+                                        <b className={styles.itemPrice}>
+                                            {obj.price}€
+                                        </b>
 
                                         <div className={styles.quantityControl}>
                                             <button
-                                                onClick={() => decreaseQuantity(obj.id)}
+                                                onClick={() =>
+                                                    decreaseQuantity(obj.id)
+                                                }
                                                 className={styles.quantityButton}
                                             >
                                                 −
@@ -100,33 +124,60 @@ function Drawer({ onClose, opened }) {
                                             </span>
 
                                             <button
-                                                onClick={() => increaseQuantity(obj.id)}
+                                                onClick={() =>
+                                                    increaseQuantity(obj.id)
+                                                }
                                                 className={styles.quantityButton}
                                             >
                                                 +
                                             </button>
                                         </div>
                                     </div>
-                                    <img className='removeBtn' onClick={() => deleteItem(obj.id)} src="./img/btn-remove.svg" alt="remove" />
+
+                                    <button
+                                        className={styles.removeButton}
+                                        onClick={() => deleteItem(obj.id)}
+                                        aria-label={`Remove ${obj.title}`}
+                                    >
+                                        ×
+                                    </button>
                                 </div>
                             ))}
                         </div>
-                        <div className='cartTotalBlock'>
-                            <ul>
-                                <li>
-                                    <span>Total</span>
-                                    <div></div>
-                                    <b>{totalPrice}€</b>
-                                </li>
-                                <li>
-                                    <span>Tax 5%</span>
-                                    <div></div>
-                                    <b>{totalPrice * 5 / 100} €</b>
-                                </li>
-                            </ul>
-                            <button disabled={isLoading} className='greenButton' onClick={onCheckout}>
-                                Check out
-                                <img src='/img/arrow.svg' alt='Arrow' />
+
+                        <div className={styles.totalBlock}>
+
+                            <div className={styles.totalRow}>
+                                <span>Subtotal</span>
+                                <span>{totalPrice.toFixed(2)}€</span>
+                            </div>
+
+                            <div className={styles.totalRow}>
+                                <span>Tax <small>5%</small></span>
+                                <span>
+                                    {(totalPrice * 5 / 100).toFixed(2)}€
+                                </span>
+                            </div>
+
+                            <div className={styles.divider} />
+
+                            <div className={`${styles.totalRow} ${styles.finalTotal}`}>
+                                <span>Total</span>
+                                <b>
+                                    {(totalPrice * 1.05).toFixed(2)}€
+                                </b>
+                            </div>
+
+                            <button
+                                disabled={isLoading}
+                                className={styles.checkoutButton}
+                                onClick={onCheckout}
+                            >
+                                <span>
+                                    {isLoading ? "Processing..." : "Checkout"}
+                                </span>
+
+                                {!isLoading && <span className={styles.arrow}>→</span>}
                             </button>
                         </div>
 
@@ -134,19 +185,27 @@ function Drawer({ onClose, opened }) {
 
                 ) : (
                     <Info
-                        title={isOrderComplete ? "Order is completed" : "Empty cart"}
-                        image={isOrderComplete ? "./img/complete-order.jpg" : "./img/empty-cart.jpg"}
-                        description={isOrderComplete ? `ordered product #${orderId}` : "add some products"}
+                        title={
+                            isOrderComplete
+                                ? "Order is completed"
+                                : "Empty cart"
+                        }
+                        image={
+                            isOrderComplete
+                                ? "./img/complete-order.jpg"
+                                : "./img/empty-cart.jpg"
+                        }
+                        description={
+                            isOrderComplete
+                                ? `ordered product #${orderId}`
+                                : "add some products"
+                        }
                         onClose={onClose}
                     />
-
                 )}
-
-
-
             </div>
         </div>
-    )
+    );
 
 }
 
