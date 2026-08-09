@@ -1,9 +1,10 @@
+import styles from "./Header.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
-import { useCart } from "../hooks/useCart";
+import { auth } from "../../../firebase";
+import { useCart } from "../../../hooks/useCart";
 import { useState, useRef, useEffect } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 
 function Header(props) {
 
@@ -52,30 +53,35 @@ function Header(props) {
     };
 
     return (
-        <header className="siteHeader">
+        <header className={styles.header}>
 
             {/* Logo */}
-            <Link to="/" className="logo">
+
+            <Link to="/" className={styles.logo}>
+
                 <img
-                    src="./img/logo.png"
-                    width={48}
-                    height={48}
+                    src="./img/logo.svg"
+                    width={44}
+                    height={44}
                     alt="KixsSneaks logo"
                 />
 
-                <div className="logoText">
+                <div className={styles.logoText}>
                     <h3>KixsSneaks</h3>
                     <p>Best sneakers ever</p>
                 </div>
+
             </Link>
 
 
             {/* Actions */}
-            <nav className="headerActions">
+
+            <nav className={styles.actions}>
 
                 {/* Cart */}
+
                 <button
-                    className="headerAction cartAction"
+                    className={`${styles.actionButton} ${styles.cartButton}`}
                     onClick={handleCartClick}
                     aria-label="Open shopping cart"
                 >
@@ -84,16 +90,17 @@ function Header(props) {
                         alt=""
                     />
 
-                    <span className="cartTotal">
+                    <span>
                         {totalPrice}€
                     </span>
                 </button>
 
 
                 {/* Favorites */}
+
                 <Link
                     to="/favorites"
-                    className="headerAction"
+                    className={styles.actionButton}
                     aria-label="Favorites"
                 >
                     <img
@@ -104,8 +111,9 @@ function Header(props) {
 
 
                 {/* User */}
+
                 <div
-                    className="userWrapper"
+                    className={styles.userWrapper}
                     ref={menuRef}
                 >
 
@@ -113,7 +121,7 @@ function Header(props) {
 
                         <Link
                             to="/login"
-                            className="headerAction"
+                            className={styles.actionButton}
                             aria-label="Login"
                         >
                             <img
@@ -126,23 +134,23 @@ function Header(props) {
 
                         <>
                             <button
-                                className="userMenuButton"
+                                className={styles.userButton}
                                 onClick={() => setOpenMenu(prev => !prev)}
                                 aria-expanded={openMenu}
                             >
 
-                                <span className="avatar">
+                                <span className={styles.avatar}>
                                     {userProfile.name
                                         .charAt(0)
                                         .toUpperCase()}
                                 </span>
 
-                                <span className="userName">
+                                <span className={styles.userName}>
                                     {userProfile.name}
                                 </span>
 
                                 <span
-                                    className={`arrow ${openMenu ? "rotate" : ""
+                                    className={`${styles.arrow} ${openMenu ? styles.rotate : ""
                                         }`}
                                 >
                                     ▼
@@ -153,7 +161,7 @@ function Header(props) {
 
                             {openMenu && (
 
-                                <div className="userDropdown">
+                                <div className={styles.dropdown}>
 
                                     <Link
                                         to="/orders"
