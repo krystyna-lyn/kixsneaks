@@ -1,20 +1,30 @@
 .card {
     position: relative;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-
-    padding: 14px;
-
+    padding: 20px;
     background: #fff;
     color: var(--color-text);
-
     border: none;
     border-radius: 16px;
-
     transition: transform var(--transition-normal);
 
     &:hover {
         transform: translateY(-4px);
     }
+}
+
+.productLink {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
 }
 
 // PRODUCT IMAGE
@@ -23,8 +33,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     height: 175px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     background: #fff;
     overflow: hidden;
 }
@@ -32,9 +43,7 @@
 .productImage {
     width: 100%;
     height: 100%;
-
     object-fit: contain;
-
     transition: transform var(--transition-normal);
 
     .card:hover & {
@@ -44,14 +53,9 @@
 
 // PRODUCT INFO
 
-.info {
-    display: flex;
-    flex-direction: column;
-    min-height: 88px;
-}
-
 .title {
-    margin: 0 0 14px;
+    min-height: 38px;
+    margin: 0;
     font-size: 14px;
     font-weight: 600;
     line-height: 1.35;
@@ -61,29 +65,21 @@
 
 .bottom {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
-    margin-top: auto;
+    min-height: 36px;
+    margin-top: 18px;
 }
 
-.priceBlock {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+.bottom>span {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
 
-    span {
-        color: var(--color-text-secondary);
-        font-size: 10px;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    strong {
-        font-size: 15px;
-        font-weight: 700;
-    }
-
+.bottom strong {
+    color: var(--color-text);
+    font-size: 15px;
+    font-weight: 700;
 }
 
 // ADD TO CART
@@ -92,20 +88,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
+    flex-shrink: 0;
     width: 36px;
     height: 36px;
-
     padding: 0;
-
     border: 1px solid var(--color-border);
     border-radius: 10px;
-
     background: transparent;
     color: var(--color-text);
-
     cursor: pointer;
-
     transition:
         background var(--transition-fast),
         border-color var(--transition-fast),
@@ -122,7 +113,6 @@
         background: var(--color-accent);
         border-color: var(--color-accent);
         color: #fff;
-
         transform: translateY(-1px);
     }
 
@@ -131,9 +121,8 @@
     }
 }
 
+// PRODUCT ALREADY IN CART
 
-
-// Product already in cart
 .added {
     background: var(--color-accent);
     border-color: var(--color-accent);
@@ -145,34 +134,24 @@
     }
 }
 
-// FAVORITEs
+// FAVORITES
 
 .favorite {
     position: absolute;
-
     top: 18px;
     right: 18px;
-
     z-index: 2;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 32px;
     height: 32px;
-
     padding: 0;
-
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 50%;
-
     background: rgba(255, 255, 255, 0.9);
-
     color: #8A8781;
-
     cursor: pointer;
-
     transition:
         color var(--transition-fast),
         background var(--transition-fast),
@@ -186,7 +165,6 @@
     &:hover {
         color: var(--color-accent);
         background: #fff;
-
         transform: scale(1.05);
     }
 
@@ -197,4 +175,67 @@
 
 .favoriteActive {
     color: var(--color-accent);
+}
+
+// RESPONSIVE
+
+@media (max-width: 768px) {
+    .card {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .imageWrapper {
+        height: 150px;
+    }
+
+    .title {
+        font-size: 13px;
+        min-height: 36px;
+    }
+
+    .bottom {
+        margin-top: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 14px;
+    }
+
+    .imageWrapper {
+        height: 135px;
+        margin-bottom: 12px;
+    }
+
+    .title {
+        font-size: 13px;
+        min-height: 35px;
+    }
+
+    .bottom {
+        margin-top: 12px;
+    }
+
+    .bottom>span {
+        font-size: 12px;
+    }
+
+    .bottom strong {
+        font-size: 14px;
+    }
+
+    .addButton {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+    }
+
+    .favorite {
+        top: 12px;
+        right: 12px;
+        width: 30px;
+        height: 30px;
+    }
 }

@@ -59,6 +59,10 @@ function Card({
 
     const itemAdded = isItemAdded(id);
 
+    const openProduct = () => {
+        navigate(`/product/${id}`);
+    };
+
     return (
         <>
             {loading ? (
@@ -82,51 +86,55 @@ function Card({
                             </span>
                         </button>
                     )}
+                    <button
+                        className={styles.productLink}
+                        onClick={openProduct}
+                        aria-label={`View ${title}`}
+                    >
 
-                    <div className={styles.imageWrapper}>
-                        <img
-                            className={styles.productImage}
-                            src={imgUrl}
-                            alt={title}
-                        />
-                    </div>
-
-                    <div className={styles.info}>
+                        <div className={styles.imageWrapper}>
+                            <img
+                                className={styles.productImage}
+                                src={imgUrl}
+                                alt={title}
+                            />
+                        </div>
 
                         <h3 className={styles.title}>
                             {title}
                         </h3>
+                    </button>
 
-                        <div className={styles.bottom}>
 
-                            <div className={styles.priceBlock}>
-                                <span>Price</span>
-                                <strong>{price} €</strong>
-                            </div>
+                    <div className={styles.bottom}>
+                        <span>Price:&nbsp;
+                            <strong>{price} €</strong>
+                        </span>
 
-                            {onPlus && (
-                                <button
-                                    className={`${styles.addButton} ${itemAdded ? styles.added : ""
-                                        }`}
-                                    onClick={onClickPlus}
-                                    aria-label={
-                                        itemAdded
-                                            ? "Remove from cart"
-                                            : "Add to cart"
-                                    }
-                                >
-                                    <span>
-                                        {itemAdded ? "✓" : "+"}
-                                    </span>
-                                </button>
-                            )}
-
-                        </div>
-
+                        {onPlus && (
+                            <button
+                                className={`${styles.addButton} ${itemAdded ? styles.added : ""
+                                    }`}
+                                onClick={onClickPlus}
+                                aria-label={
+                                    itemAdded
+                                        ? "Remove from cart"
+                                        : "Add to cart"
+                                }
+                            >
+                                <span>
+                                    {itemAdded ? "✓" : "+"}
+                                </span>
+                            </button>
+                        )}
                     </div>
 
-                </article>
-            )}
+
+
+
+                </article >
+            )
+            }
         </>
     );
 }
