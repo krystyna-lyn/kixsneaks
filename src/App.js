@@ -9,6 +9,7 @@ import { useState } from 'react';
 import Home from './components/pages/Home/Home';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
+import Product from './components/pages/Product/Product';
 
 import Orders from './components/pages/Orders';
 import ProtectedRoute from "./components/routes/ProtectedRoute";
@@ -60,6 +61,9 @@ function App() {
             </ProtectedRoute>
           }
           />
+          <Route path="/product/:id" element={
+            <Product />
+          } />
           <Route path="/login" element={
             <Login />
           }
@@ -74,6 +78,7 @@ function App() {
             </ProtectedRoute>
           }
           />
+
 
         </Routes>
       </main>
