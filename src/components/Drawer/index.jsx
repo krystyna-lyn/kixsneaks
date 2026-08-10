@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Info from "../Info";
+import Info from "../Info/Info";
 import { useCart } from "../../hooks/useCart";
 import { createOrder, clearCart } from "../../services/orderService";
 import { useAuth } from "../../hooks/useAuth";
