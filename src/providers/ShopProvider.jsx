@@ -157,21 +157,22 @@ function ShopProvider({ children }) {
 
     };
 
-    const increaseQuantity = async (id) => {
+
+    const increaseQuantity = async (productId) => {
         try {
-            const item = cartItems.find(
-                item => item.id === id
+            const cartItem = cartItems.find(
+                item => String(item.productId) === String(productId)
             );
 
-            if (!item) return;
+            if (!cartItem) return;
 
-            const newQuantity = (item.quantity || 1) + 1;
+            const newQuantity = (cartItem.quantity || 1) + 1;
 
-            await updateCartQuantity(id, newQuantity);
+            await updateCartQuantity(cartItem.id, newQuantity);
 
             setCartItems(prev =>
                 prev.map(item =>
-                    item.id === id
+                    item.id === cartItem.id
                         ? { ...item, quantity: newQuantity }
                         : item
                 )
@@ -183,31 +184,31 @@ function ShopProvider({ children }) {
         }
     };
 
-    const decreaseQuantity = async (id) => {
+    const decreaseQuantity = async (productId) => {
         try {
-            const item = cartItems.find(
-                item => item.id === id
+            const cartItem = cartItems.find(
+                item => String(item.productId) === String(productId)
             );
 
-            if (!item) return;
+            if (!cartItem) return;
 
-            const newQuantity = (item.quantity || 1) - 1;
+            const newQuantity = (cartItem.quantity || 1) - 1;
 
             if (newQuantity <= 0) {
-                await removeCartItem(id);
+                await removeCartItem(cartItem.id);
 
                 setCartItems(prev =>
-                    prev.filter(item => item.id !== id)
+                    prev.filter(item => item.id !== cartItem.id)
                 );
 
                 return;
             }
 
-            await updateCartQuantity(id, newQuantity);
+            await updateCartQuantity(cartItem.id, newQuantity);
 
             setCartItems(prev =>
                 prev.map(item =>
-                    item.id === id
+                    item.id === cartItem.id
                         ? { ...item, quantity: newQuantity }
                         : item
                 )

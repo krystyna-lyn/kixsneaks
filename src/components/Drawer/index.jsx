@@ -111,9 +111,11 @@ function Drawer({ onClose, opened }) {
 
                                         <div className={styles.quantityControl}>
                                             <button
-                                                onClick={() =>
-                                                    decreaseQuantity(obj.id)
-                                                }
+                                                type="button"
+                                                onClick={() => {
+                                                    decreaseQuantity(obj.productId);
+                                                }}
+
                                                 className={styles.quantityButton}
                                             >
                                                 −
@@ -124,9 +126,8 @@ function Drawer({ onClose, opened }) {
                                             </span>
 
                                             <button
-                                                onClick={() =>
-                                                    increaseQuantity(obj.id)
-                                                }
+                                                type="button"
+                                                onClick={() => increaseQuantity(obj.productId)}
                                                 className={styles.quantityButton}
                                             >
                                                 +
@@ -192,8 +193,8 @@ function Drawer({ onClose, opened }) {
                         }
                         image={
                             isOrderComplete
-                                ? "./img/complete-order.jpg"
-                                : "./img/empty-cart.jpg"
+                                ? "/img/complete-order.jpg"
+                                : "/img/empty-cart.jpg"
                         }
                         description={
                             isOrderComplete

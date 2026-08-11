@@ -6,13 +6,17 @@ import styles from "./Product.module.scss";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const Product = () => {
-
+const Product = ({ openCart }) => {
     const { id } = useParams();
-
     const navigate = useNavigate();
 
-    const { addToCart, isItemAdded } = useShop();
+    const {
+        cartItems,
+        addToCart,
+        isItemAdded,
+        increaseQuantity,
+        decreaseQuantity
+    } = useShop();
 
     const [product, setProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -22,17 +26,16 @@ const Product = () => {
             try {
                 const data = await getProductById(id);
                 setProduct(data);
-
             } catch (error) {
                 console.error(error);
                 toast.error("Error loading product");
-            }
-            finally {
+            } finally {
                 setIsLoading(false);
             }
-        }
+        };
+
         loadProduct();
-    }, [id])
+    }, [id]);
 
     if (isLoading) {
         return <Loader />;
@@ -42,6 +45,7 @@ const Product = () => {
         return (
             <div className={styles.notFound}>
                 <h2>Product not found</h2>
+
                 <button onClick={() => navigate("/")}>
                     Back to shop
                 </button>
@@ -51,8 +55,19 @@ const Product = () => {
 
     const itemAdded = isItemAdded(product.id);
 
+    const cartItem = cartItems.find(
+        item => String(item.productId) === String(product.id)
+    );
+
+    const quantity = cartItem?.quantity || 0;
+
+    const handleAddToCart = () => {
+        addToCart(product);
+    };
+
     return (
         <section className={styles.productPage}>
+
             <button
                 className={styles.backButton}
                 onClick={() => navigate(-1)}
@@ -61,16 +76,20 @@ const Product = () => {
             </button>
 
             <div className={styles.productCard}>
+
                 <div className={styles.imageSection}>
+
                     <div className={styles.imageWrapper}>
                         <img
                             src={product.imgUrl}
                             alt={product.title}
                         />
                     </div>
+
                 </div>
 
                 <div className={styles.infoSection}>
+
                     <span className={styles.category}>
                         KIXSSNEAKS / COLLECTION
                     </span>
@@ -86,22 +105,66 @@ const Product = () => {
                         comfort and everyday performance.
                     </p>
 
+                    {itemAdded && (
+                        <div className={styles.quantityControl}>
+
+                            <button
+                                onClick={() =>
+                                    decreaseQuantity(product.id)
+                                }
+                                className={styles.quantityButton}
+                                aria-label="Decrease quantity"
+                            >
+                                −
+                            </button>
+
+                            <span className={styles.quantity}>
+                                {quantity}
+                            </span>
+
+                            <button
+                                onClick={() =>
+                                    increaseQuantity(product.id)
+                                }
+                                className={styles.quantityButton}
+                                aria-label="Increase quantity"
+                            >
+                                +
+                            </button>
+
+                        </div>
+                    )}
+
                     <div className={styles.divider}></div>
+                    <div className={styles.cartActions}>
+                        <button
+                            className={`${styles.addButton} ${itemAdded ? styles.added : ""}`}
+                            onClick={handleAddToCart}
+                        >
+                            <span>
+                                {itemAdded
+                                    ? "✓ Added to cart"
+                                    : "Add to cart"}
+                            </span>
 
-                    <button
-                        className={`${styles.addButton} ${itemAdded ? styles.added : ""}`}
-                        onClick={() => addToCart(product)}
-                    >
-                        <span>
-                            {itemAdded ? "✓ Added to cart" : "Add to cart"}
-                        </span>
-
-                        <span className={styles.arrow}>
-                            →
-                        </span>
-                    </button>
-
+                            {!itemAdded && (
+                                <span className={styles.arrow}>
+                                    →
+                                </span>
+                            )}
+                        </button>
+                        {itemAdded && (
+                            <button
+                                className={styles.viewCartButton}
+                                onClick={openCart}
+                            >
+                                View cart
+                                <span>→</span>
+                            </button>
+                        )}
+                    </div>
                     <div className={styles.details}>
+
                         <div>
                             <span>Delivery</span>
                             <strong>Free shipping</strong>
@@ -116,11 +179,15 @@ const Product = () => {
                             <span>Availability</span>
                             <strong>In stock</strong>
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
     );
-}
+};
 
-export default Product
+export default Product;
