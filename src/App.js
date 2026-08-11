@@ -62,7 +62,7 @@ function App() {
           }
           />
           <Route path="/product/:id" element={
-            <Product />
+            <Product openCart={() => setCartOpened(true)} />
           } />
           <Route path="/login" element={
             <Login />
