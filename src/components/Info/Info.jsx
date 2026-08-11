@@ -9,7 +9,7 @@ function Info({ onClose, title, image, description }) {
             <h2>{title}</h2>
             <p>{description}</p>
             <button className={styles.backButton} onClick={onClose}>
-                <img src="./img/arrow.svg" alt="" />
+                <img src="/img/arrow.svg" alt="" />
                 Go back
             </button>
         </div>

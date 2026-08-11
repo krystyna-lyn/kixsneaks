@@ -60,7 +60,7 @@ function Header(props) {
             <Link to="/" className={styles.logo}>
 
                 <img
-                    src="./img/logo.svg"
+                    src="/img/logo.svg"
                     width={44}
                     height={44}
                     alt="KixsSneaks logo"
@@ -86,7 +86,7 @@ function Header(props) {
                     aria-label="Open shopping cart"
                 >
                     <img
-                        src="./img/cart.svg"
+                        src="/img/cart.svg"
                         alt=""
                     />
 
@@ -104,7 +104,7 @@ function Header(props) {
                     aria-label="Favorites"
                 >
                     <img
-                        src="./img/heart.svg"
+                        src="/img/heart.svg"
                         alt=""
                     />
                 </Link>
@@ -125,7 +125,7 @@ function Header(props) {
                             aria-label="Login"
                         >
                             <img
-                                src="./img/user.svg"
+                                src="/img/user.svg"
                                 alt=""
                             />
                         </Link>
