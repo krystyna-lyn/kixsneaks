@@ -140,6 +140,8 @@ const Product = ({ openCart }) => {
                         <button
                             className={`${styles.addButton} ${itemAdded ? styles.added : ""}`}
                             onClick={handleAddToCart}
+                            disabled={itemAdded}
+                            aria-label={itemAdded ? "Added to cart" : "Add to cart"}
                         >
                             <span>
                                 {itemAdded

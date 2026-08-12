@@ -36,10 +36,11 @@ function Card({
                     from: location
                 }
             });
-
             return;
         }
-
+        if (itemAdded) {
+            return;
+        }
         onPlus(obj);
     };
 
@@ -113,14 +114,9 @@ function Card({
 
                         {onPlus && (
                             <button
-                                className={`${styles.addButton} ${itemAdded ? styles.added : ""
-                                    }`}
+                                className={`${styles.addButton} ${itemAdded ? styles.added : ""}`}
                                 onClick={onClickPlus}
-                                aria-label={
-                                    itemAdded
-                                        ? "Remove from cart"
-                                        : "Add to cart"
-                                }
+                                aria-label={itemAdded ? "Already in cart" : "Add to cart"}
                             >
                                 <span>
                                     {itemAdded ? "✓" : "+"}

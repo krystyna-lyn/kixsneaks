@@ -193,10 +193,16 @@
 // ADDED
 .added {
     background: #111111;
+    cursor: default;
+}
 
-    &:hover {
-        background: #222222;
-    }
+.added:hover {
+    background: #111111;
+    transform: none;
+}
+
+.added:disabled {
+    opacity: 1;
 }
 
 // VIEW CART
