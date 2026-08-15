@@ -2,16 +2,16 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBHZ5WXsZXfop4WUSIl6tVpb1NqB-2Rr58",
-    authDomain: "kixsneaks.firebaseapp.com",
-    projectId: "kixsneaks",
-    storageBucket: "kixsneaks.firebasestorage.app",
-    messagingSenderId: "955689877754",
-    appId: "1:955689877754:web:616b1056d5c447c85f4943",
-    measurementId: "G-DF5W9S8SPD",
-};
 
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
+    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+};
 
 const app = initializeApp(firebaseConfig);
 
