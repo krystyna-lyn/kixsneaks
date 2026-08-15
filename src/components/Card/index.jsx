@@ -66,71 +66,69 @@ function Card({
 
     return (
         <>
-            {loading ? (
-                <Loader />
-            ) : (
-                <article className={styles.card}>
+            <article className={styles.card}>
+                {loading ? (
+                    <Loader />
+                ) : (
+                    <>
 
-                    {addFavorite && (
-                        <button
-                            className={`${styles.favorite} ${isFavorite ? styles.favoriteActive : ""
-                                }`}
-                            onClick={onClickFavorite}
-                            aria-label={
-                                isFavorite
-                                    ? "Remove from favorites"
-                                    : "Add to favorites"
-                            }
-                        >
-                            <span>
-                                {isFavorite ? "♥" : "♡"}
-                            </span>
-                        </button>
-                    )}
-                    <button
-                        className={styles.productLink}
-                        onClick={openProduct}
-                        aria-label={`View ${title}`}
-                    >
-
-                        <div className={styles.imageWrapper}>
-                            <img
-                                className={styles.productImage}
-                                src={imgUrl}
-                                alt={title}
-                            />
-                        </div>
-
-                        <h3 className={styles.title}>
-                            {title}
-                        </h3>
-                    </button>
-
-
-                    <div className={styles.bottom}>
-                        <span>Price:&nbsp;
-                            <strong>{price} €</strong>
-                        </span>
-
-                        {onPlus && (
+                        {addFavorite && (
                             <button
-                                className={`${styles.addButton} ${itemAdded ? styles.added : ""}`}
-                                onClick={onClickPlus}
-                                aria-label={itemAdded ? "Already in cart" : "Add to cart"}
+                                className={`${styles.favorite} ${isFavorite ? styles.favoriteActive : ""
+                                    }`}
+                                onClick={onClickFavorite}
+                                aria-label={
+                                    isFavorite
+                                        ? "Remove from favorites"
+                                        : "Add to favorites"
+                                }
                             >
                                 <span>
-                                    {itemAdded ? "✓" : "+"}
+                                    {isFavorite ? "♥" : "♡"}
                                 </span>
                             </button>
                         )}
-                    </div>
+                        <button
+                            className={styles.productLink}
+                            onClick={openProduct}
+                            aria-label={`View ${title}`}
+                        >
+
+                            <div className={styles.imageWrapper}>
+                                <img
+                                    className={styles.productImage}
+                                    src={imgUrl}
+                                    alt={title}
+                                />
+                            </div>
+
+                            <h3 className={styles.title}>
+                                {title}
+                            </h3>
+                        </button>
 
 
+                        <div className={styles.bottom}>
+                            <span>Price:&nbsp;
+                                <strong>{price} €</strong>
+                            </span>
 
-
-                </article >
-            )
-            }
+                            {onPlus && (
+                                <button
+                                    className={`${styles.addButton} ${itemAdded ? styles.added : ""}`}
+                                    onClick={onClickPlus}
+                                    aria-label={itemAdded ? "Already in cart" : "Add to cart"}
+                                >
+                                    <span>
+                                        {itemAdded ? "✓" : "+"}
+                                    </span>
+                                </button>
+                            )}
+                        </div>
+                    </>
+                )
+                }
+            </article >
         </>
     );
 }

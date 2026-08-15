@@ -2,7 +2,7 @@ import Card from "../Card";
 import { useShop } from "../../hooks/useShop";
 
 function Favorites({ addToCart }) {
-    const { favorite, onAddToFavorite } = useShop();
+    const { favorite, onAddToFavorite, isLoading } = useShop();
 
 
     return (
@@ -11,7 +11,7 @@ function Favorites({ addToCart }) {
                 <h1>My Favorites</h1>
             </div>
 
-            <div className="sneakers d-flex justify-between flex-wrap">
+            <div className="sneakers">
                 {favorite.length > 0 ? (
                     favorite.map((item) => (
                         <Card
@@ -22,6 +22,7 @@ function Favorites({ addToCart }) {
                             price={item.price}
                             addFavorite={onAddToFavorite}
                             onPlus={addToCart}
+                            loading={isLoading}
                         />
                     ))
                 ) : (
