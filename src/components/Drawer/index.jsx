@@ -2,6 +2,7 @@ import { useState } from "react";
 import Info from "../Info/Info";
 import { useCart } from "../../hooks/useCart";
 import { createOrder, clearCart } from "../../services/orderService";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 import styles from '../Drawer/Drawer.module.scss'
@@ -17,6 +18,7 @@ function Drawer({ onClose, opened }) {
     const [isLoading, setIsLoading] = useState(false);
     const { user } = useAuth();
     const { totalPrice } = useCart()
+    const navigate = useNavigate();
     const {
         cartItems,
         setCartItems,
@@ -93,17 +95,31 @@ function Drawer({ onClose, opened }) {
                                     key={obj.id}
                                     className={styles.cartItem}
                                 >
-                                    <div
-                                        style={{
-                                            backgroundImage: `url(${obj.imgUrl})`
+                                    <button
+                                        className={styles.cartItemImageButton}
+                                        onClick={() => {
+                                            onClose();
+                                            navigate(`/product/${obj.productId}`);
                                         }}
-                                        className={styles.cartItemImg}
-                                    />
+                                        aria-label={`View ${obj.title}`}
+                                    >
+                                        <div
+                                            style={{
+                                                backgroundImage: `url(${obj.imgUrl})`
+                                            }}
+                                            className={styles.cartItemImg}
+                                        />
+                                    </button>
 
                                     <div className={styles.itemInfo}>
-                                        <p className={styles.itemTitle}>
+                                        <button
+                                            className={styles.itemTitle}
+                                            onClick={() => {
+                                                onClose();
+                                                navigate(`/product/${obj.productId}`);
+                                            }}>
                                             {obj.title}
-                                        </p>
+                                        </button>
 
                                         <b className={styles.itemPrice}>
                                             {obj.price}€
@@ -205,7 +221,7 @@ function Drawer({ onClose, opened }) {
                     />
                 )}
             </div>
-        </div>
+        </div >
     );
 
 }
