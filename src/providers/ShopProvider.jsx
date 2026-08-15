@@ -33,7 +33,6 @@ function ShopProvider({ children }) {
                     setFavorite(favorites);
 
                     const cart = await getCart(user.uid);
-                    console.log("CART FROM FIREBASE:", cart);
                     setCartItems(cart);
                 } else {
                     setFavorite([]);
@@ -55,8 +54,6 @@ function ShopProvider({ children }) {
 
 
     const addToCart = async (obj) => {
-        console.log("ADD TO CART:", obj);
-        console.log("CURRENT CART:", cartItems);
         if (!user) return;
 
         try {
@@ -66,7 +63,6 @@ function ShopProvider({ children }) {
 
             if (findItem) {
                 const newQuantity = (findItem.quantity || 1) + 1;
-                console.log("NEW QUANTITY:", newQuantity);
 
                 await updateCartQuantity(
 

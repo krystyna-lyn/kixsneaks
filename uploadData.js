@@ -18,7 +18,6 @@ async function uploadCollection(name, data) {
     for (const item of data) {
         const { id, ...rest } = item;
         await setDoc(doc(db, name, String(id)), rest);
-        console.log(`✅ ${name}/${id}`);
     }
 }
 
@@ -27,8 +26,6 @@ async function uploadAll() {
     await uploadCollection("cart", dbData.cart);
     await uploadCollection("favorite", dbData.favorite);
     await uploadCollection("orders", dbData.orders);
-
-    console.log("🎉 All data is uploaded!");
 }
 
 uploadAll().catch(console.error);
