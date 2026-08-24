@@ -20,7 +20,80 @@ function ShopProvider({ children }) {
     const [isLoading, setIsLoading] = useState(true);
     const { user, loading } = useAuth();
 
+    const mergeGuestCart = async (user, firebaseCart) => {
+        const savedCart = localStorage.getItem(
+            "kixsneaks_guest_cart"
+        );
+
+        if (!savedCart) {
+            return firebaseCart;
+        }
+
+        try {
+            const guestCart = JSON.parse(savedCart);
+
+            if (!guestCart.length) {
+                return firebaseCart;
+            }
+
+            const mergedCart = [...firebaseCart];
+
+            for (const guestItem of guestCart) {
+                const existingItem = mergedCart.find(
+                    item =>
+                        String(item.productId) ===
+                        String(guestItem.productId)
+                );
+
+                if (existingItem) {
+                    const newQuantity =
+                        (existingItem.quantity || 1) +
+                        (guestItem.quantity || 1);
+
+                    await updateCartQuantity(
+                        existingItem.id,
+                        newQuantity
+                    );
+
+                    existingItem.quantity = newQuantity;
+
+                } else {
+                    const cartItem = {
+                        userId: user.uid,
+                        productId: guestItem.productId,
+                        title: guestItem.title,
+                        price: guestItem.price,
+                        imgUrl: guestItem.imgUrl,
+                        quantity: guestItem.quantity || 1
+                    };
+
+                    const id = await addCartItem(cartItem);
+
+                    mergedCart.push({
+                        id,
+                        ...cartItem
+                    });
+                }
+            }
+
+            localStorage.removeItem(
+                "kixsneaks_guest_cart"
+            );
+
+            return mergedCart;
+
+        } catch (error) {
+            console.error(
+                "Error merging guest cart:",
+                error
+            );
+
+            return firebaseCart;
+        }
+    };
+
     useEffect(() => {
+
         async function loadData() {
             try {
                 setIsLoading(true);
@@ -32,13 +105,28 @@ function ShopProvider({ children }) {
                     const favorites = await getFavorites(user.uid);
                     setFavorite(favorites);
 
-                    const cart = await getCart(user.uid);
-                    setCartItems(cart);
+                    const firebaseCart = await getCart(user.uid);
+
+                    const mergedCart = await mergeGuestCart(
+                        user,
+                        firebaseCart
+                    );
+
+                    setCartItems(mergedCart);
+
                 } else {
                     setFavorite([]);
-                    setCartItems([]);
-                }
 
+                    const savedCart = localStorage.getItem(
+                        "kixsneaks_guest_cart"
+                    );
+
+                    if (savedCart) {
+                        setCartItems(JSON.parse(savedCart));
+                    } else {
+                        setCartItems([]);
+                    }
+                }
             } catch (error) {
                 console.error(error);
             } finally {
@@ -54,8 +142,6 @@ function ShopProvider({ children }) {
 
 
     const addToCart = async (obj) => {
-        if (!user) return;
-
         try {
             const findItem = cartItems.find(
                 item => String(item.productId) === String(obj.id)
@@ -64,40 +150,68 @@ function ShopProvider({ children }) {
             if (findItem) {
                 const newQuantity = (findItem.quantity || 1) + 1;
 
-                await updateCartQuantity(
-
-                    findItem.id,
-                    newQuantity
+                const updatedCart = cartItems.map(item =>
+                    item.id === findItem.id
+                        ? { ...item, quantity: newQuantity }
+                        : item
                 );
 
-                setCartItems(prev =>
-                    prev.map(item =>
-                        item.id === findItem.id
-                            ? { ...item, quantity: newQuantity }
-                            : item
-                    )
-                );
+                if (user) {
+                    await updateCartQuantity(
+                        findItem.id,
+                        newQuantity
+                    );
+                } else {
+                    localStorage.setItem(
+                        "kixsneaks_guest_cart",
+                        JSON.stringify(updatedCart)
+                    );
+                }
 
-            } else {
+                setCartItems(updatedCart);
 
-                const cartItem = {
+                return;
+            }
+            const cartItem = {
+                productId: obj.id,
+                title: obj.title,
+                price: obj.price,
+                imgUrl: obj.imgUrl,
+                quantity: 1
+            };
+
+            if (user) {
+                const firebaseCartItem = {
                     userId: user.uid,
-                    productId: obj.id,
-                    title: obj.title,
-                    price: obj.price,
-                    imgUrl: obj.imgUrl,
-                    quantity: 1
+                    ...cartItem
                 };
 
-                const id = await addCartItem(cartItem);
+                const id = await addCartItem(firebaseCartItem);
 
                 setCartItems(prev => [
                     ...prev,
                     {
                         id,
-                        ...cartItem
+                        ...firebaseCartItem
                     }
                 ]);
+            } else {
+                const guestCartItem = {
+                    id: `guest-${obj.id}`,
+                    ...cartItem
+                };
+
+                const updatedCart = [
+                    ...cartItems,
+                    guestCartItem
+                ];
+
+                setCartItems(updatedCart);
+
+                localStorage.setItem(
+                    "kixsneaks_guest_cart",
+                    JSON.stringify(updatedCart)
+                );
             }
 
         } catch (error) {
@@ -164,15 +278,25 @@ function ShopProvider({ children }) {
 
             const newQuantity = (cartItem.quantity || 1) + 1;
 
-            await updateCartQuantity(cartItem.id, newQuantity);
-
-            setCartItems(prev =>
-                prev.map(item =>
-                    item.id === cartItem.id
-                        ? { ...item, quantity: newQuantity }
-                        : item
-                )
+            const updatedCart = cartItems.map(item =>
+                item.id === cartItem.id
+                    ? { ...item, quantity: newQuantity }
+                    : item
             );
+
+            if (user) {
+                await updateCartQuantity(
+                    cartItem.id,
+                    newQuantity
+                );
+            } else {
+                localStorage.setItem(
+                    "kixsneaks_guest_cart",
+                    JSON.stringify(updatedCart)
+                );
+            }
+
+            setCartItems(updatedCart);
 
         } catch (error) {
             console.error(error);
@@ -191,38 +315,70 @@ function ShopProvider({ children }) {
             const newQuantity = (cartItem.quantity || 1) - 1;
 
             if (newQuantity <= 0) {
-                await removeCartItem(cartItem.id);
+                if (user) {
+                    await removeCartItem(cartItem.id);
+                }
 
-                setCartItems(prev =>
-                    prev.filter(item => item.id !== cartItem.id)
+                const updatedCart = cartItems.filter(
+                    item => item.id !== cartItem.id
                 );
+
+                setCartItems(updatedCart);
+
+                if (!user) {
+                    localStorage.setItem(
+                        "kixsneaks_guest_cart",
+                        JSON.stringify(updatedCart)
+                    );
+                }
 
                 return;
             }
 
-            await updateCartQuantity(cartItem.id, newQuantity);
-
-            setCartItems(prev =>
-                prev.map(item =>
-                    item.id === cartItem.id
-                        ? { ...item, quantity: newQuantity }
-                        : item
-                )
+            const updatedCart = cartItems.map(item =>
+                item.id === cartItem.id
+                    ? { ...item, quantity: newQuantity }
+                    : item
             );
+
+            if (user) {
+                await updateCartQuantity(
+                    cartItem.id,
+                    newQuantity
+                );
+            } else {
+                localStorage.setItem(
+                    "kixsneaks_guest_cart",
+                    JSON.stringify(updatedCart)
+                );
+            }
+
+            setCartItems(updatedCart);
 
         } catch (error) {
             console.error(error);
             toast.error("Error decreasing quantity");
         }
     };
-
     const deleteItem = async (id) => {
         try {
-            await removeCartItem(id);
+            if (user) {
+                await removeCartItem(id);
+            }
 
-            setCartItems(prev =>
-                prev.filter(item => item.id !== id)
+            const updatedCart = cartItems.filter(
+                item => item.id !== id
             );
+
+            setCartItems(updatedCart);
+
+            if (!user) {
+                localStorage.setItem(
+                    "kixsneaks_guest_cart",
+                    JSON.stringify(updatedCart)
+                );
+            }
+
         } catch (error) {
             toast.error("Error deleting item from cart");
             console.error(error);

@@ -1,5 +1,5 @@
 import styles from "./Header.module.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { useCart } from "../../../hooks/useCart";
@@ -8,8 +8,7 @@ import { useAuth } from "../../../hooks/useAuth";
 
 function Header(props) {
 
-    const { user, userProfile } = useAuth();
-    const navigate = useNavigate();
+    const { userProfile } = useAuth();
     const { totalPrice } = useCart();
 
     const [openMenu, setOpenMenu] = useState(false);
@@ -43,12 +42,6 @@ function Header(props) {
 
     const handleCartClick = () => {
         setOpenMenu(false);
-
-        if (!user) {
-            navigate("/login");
-            return;
-        }
-
         props.openCart();
     };
 

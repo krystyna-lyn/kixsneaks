@@ -29,12 +29,22 @@ function Drawer({ onClose, opened }) {
 
 
     const onCheckout = async () => {
+
+        if (!user) {
+            navigate("/login", {
+                state: {
+                    from: {
+                        pathname: "/"
+                    },
+                    checkout: true
+                }
+            });
+
+            return;
+        }
+
         try {
-
             setIsLoading(true);
-
-            // create order
-
 
             const orderId = await createOrder({
                 userId: user.uid,
@@ -43,25 +53,21 @@ function Drawer({ onClose, opened }) {
 
             setOrderId(orderId);
 
-            // delete items from cart
             await clearCart(cartItems);
 
-            // refresh React
             setCartItems([]);
 
             setIsOrderComplete(true);
 
         } catch (error) {
-
             console.error(error);
             toast.error("Something went wrong");
 
         } finally {
-
             setIsLoading(false);
-
         }
     };
+
     return (
         <div
             className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}

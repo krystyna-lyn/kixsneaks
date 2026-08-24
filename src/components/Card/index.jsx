@@ -29,18 +29,12 @@ function Card({
         item => String(item.productId) === String(id)
     );
 
+
     const onClickPlus = () => {
-        if (!user) {
-            navigate("/login", {
-                state: {
-                    from: location
-                }
-            });
-            return;
-        }
         if (itemAdded) {
             return;
         }
+
         onPlus(obj);
     };
 
