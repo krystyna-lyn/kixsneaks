@@ -50,7 +50,7 @@ function Orders() {
             {!isLoading && orders.length === 0 ? (
                 <h2>You don't have any orders yet.</h2>
             ) :
-                (<div className="sneakers d-flex justify-between flex-wrap">
+                (<div className="sneakers">
 
                     {orders.map((item) => {
                         return (
