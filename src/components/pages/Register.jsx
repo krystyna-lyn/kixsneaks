@@ -47,7 +47,6 @@ function Register() {
             );
             toast.success("Registration successful!");
 
-            navigate("/login");
 
         } catch (error) {
 

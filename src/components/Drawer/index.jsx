@@ -29,14 +29,12 @@ function Drawer({ onClose, opened }) {
 
 
     const onCheckout = async () => {
-
         if (!user) {
+            onClose();
+
             navigate("/login", {
                 state: {
-                    from: {
-                        pathname: "/"
-                    },
-                    checkout: true
+                    from: "/checkout"
                 }
             });
 
